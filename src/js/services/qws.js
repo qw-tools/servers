@@ -41,7 +41,6 @@ const transformServers = (servers) => {
   const includedSettings = [
     "*admin",
     "*gamedir",
-    "*version",
     "ktxver",
     "sv_antilag",
     "maxspectators",
