@@ -22,8 +22,7 @@ const versionToObject = (version) => {
   if (version.includes(" ")) {
     const versionParts = version.split(" ");
     type = versionParts[0];
-    versionParts.shift();
-    build = versionParts.join(" ");
+    build = version;
   } else {
     type = version;
   }
