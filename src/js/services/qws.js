@@ -49,7 +49,7 @@ const transformServers = (servers) => {
   for (let i = 0; i < servers.length; i++) {
     const { Address, Version, Settings = {}, ExtraInfo } = servers[i];
     result.push({
-      Hostname: Settings["hostname"],
+      Hostname: Settings["hostname"].replaceAll(".", "&#46;"),
       Address,
       ...flatten(versionToObject(Version)),
       ...flatten(_pick(Settings, includedSettings)),
