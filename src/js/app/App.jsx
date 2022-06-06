@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid } from "@githubocto/flat-ui";
-import { useGetMvdsvQuery } from "../services/qws.js";
+import { useGetServersQuery } from "../services/qws.js";
 
 const ServerGrid = () => {
-  const { data = [] } = useGetMvdsvQuery({});
+  const { data = [] } = useGetServersQuery({});
 
   return (
     <Grid

@@ -8,32 +8,14 @@ export const qwsSlice = createApi({
     baseUrl: "https://metaqtv.quake.se/v2/",
   }),
   endpoints: (builder) => ({
-    getMvdsv: builder.query({
+    getServers: builder.query({
       query: () => "servers",
       transformResponse: (r) => transformServers(r),
     }),
   }),
 });
 
-const versionToObject = (version) => {
-  let type = "";
-  let build = "";
-
-  if (version.includes(" ")) {
-    const versionParts = version.split(" ");
-    type = versionParts[0];
-    build = version;
-  } else {
-    type = version;
-  }
-
-  return {
-    Version: {
-      type,
-      build,
-    },
-  };
-};
+export const { useGetServersQuery } = qwsSlice;
 
 const transformServers = (servers) => {
   const result = [];
@@ -60,4 +42,22 @@ const transformServers = (servers) => {
   return result;
 };
 
-export const { useGetMvdsvQuery } = qwsSlice;
+const versionToObject = (version) => {
+  let type;
+  let build = "";
+
+  if (version.includes(" ")) {
+    const versionParts = version.split(" ");
+    type = versionParts[0];
+    build = version;
+  } else {
+    type = version;
+  }
+
+  return {
+    Version: {
+      type,
+      build,
+    },
+  };
+};
