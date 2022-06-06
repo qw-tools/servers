@@ -1,4 +1,4 @@
-# QuakeWorld Server Overview
+# QuakeWorld Server Overview [![pages-build-deployment](https://github.com/vikpe/qw-server-overview/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/vikpe/qw-server-overview/actions/workflows/pages/pages-build-deployment)
 > https://vikpe.org/qw-server-overview/ 🚀
 
 ## Data sources
