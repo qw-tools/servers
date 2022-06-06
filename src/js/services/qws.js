@@ -43,6 +43,7 @@ const transformServers = (servers) => {
     "*gamedir",
     "ktxver",
     "sv_antilag",
+    "maxclients",
     "maxspectators",
   ];
 
