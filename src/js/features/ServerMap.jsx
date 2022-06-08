@@ -5,7 +5,7 @@ import { Marker } from "react-leaflet/Marker";
 import { Popup } from "react-leaflet/Popup";
 import { useGetServersQuery } from "../services/qws.js";
 
-export const Map = () => {
+export const ServerMap = () => {
   const { data = [] } = useGetServersQuery({});
 
   return (
@@ -21,7 +21,11 @@ export const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {data.map((server, index) => (
-          <MarkerMemo key={index} coordinates={server.Coordinates} />
+          <MarkerMemo
+            key={index}
+            coordinates={server.Coordinates}
+            hostname={server.Hostname}
+          />
         ))}
       </MapContainer>
     </div>
@@ -30,6 +34,6 @@ export const Map = () => {
 
 const MarkerMemo = React.memo((props) => (
   <Marker position={props.coordinates}>
-    <Popup>ye!!!</Popup>
+    <Popup>{props.hostname}</Popup>
   </Marker>
 ));
