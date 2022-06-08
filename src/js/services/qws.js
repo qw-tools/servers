@@ -35,7 +35,7 @@ const transformServers = (servers) => {
       Address,
       ...flatten(versionToObject(Version)),
       ...flatten(_pick(Settings, includedSettings)),
-      ...flatten(_pick(ExtraInfo["Geo"], ["Region", "Country"])),
+      ...flatten(_pick(ExtraInfo["Geo"], ["Region", "Country", "City"])),
     });
   }
 
