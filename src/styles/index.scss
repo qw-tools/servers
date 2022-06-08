@@ -1,3 +1,23 @@
 @import 'leaflet/dist/leaflet.css'; // sass
 
-.markercluster-map { height: 90vh; }
+.AppContainer {
+  display: grid;
+  grid-template-rows: 48px auto;
+  height: 100%;
+}
+
+
+.AppHeader {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 2px solid #ccc;
+}
+
+.AppBody {
+  background-color: #ddd;
+}
+
+.map {
+  height: 100%;
+}

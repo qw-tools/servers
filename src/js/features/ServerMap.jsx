@@ -9,26 +9,24 @@ export const ServerMap = () => {
   const { data = [] } = useGetServersQuery({});
 
   return (
-    <div id="map">
-      <MapContainer
-        className="markercluster-map"
-        center={[0, 0]}
-        zoom={2}
-        scrollWheelZoom={false}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <MapContainer
+      className="map"
+      center={[0, 0]}
+      zoom={2}
+      scrollWheelZoom={false}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {data.map((server, index) => (
+        <MarkerMemo
+          key={index}
+          coordinates={server.Coordinates}
+          hostname={server.Hostname}
         />
-        {data.map((server, index) => (
-          <MarkerMemo
-            key={index}
-            coordinates={server.Coordinates}
-            hostname={server.Hostname}
-          />
-        ))}
-      </MapContainer>
-    </div>
+      ))}
+    </MapContainer>
   );
 };
 

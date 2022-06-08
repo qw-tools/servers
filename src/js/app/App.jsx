@@ -6,12 +6,19 @@ import "../../styles/index.scss";
 
 export const App = () => (
   <BrowserRouter>
-    Display as: <Link to="/">List</Link> | <Link to="map">Map</Link>
-    <hr />
-    <Routes>
-      <Route path="/" element={<ServerTable />} />
-      <Route path="map" element={<ServerMap />} />
-    </Routes>
+    <div className="AppContainer">
+      <div className="AppHeader">
+        <div>
+          Display as: <Link to="/">List</Link> | <Link to="map">Map</Link>
+        </div>
+      </div>
+      <div className="AppBody">
+        <Routes>
+          <Route path="/" element={<ServerTable />} />
+          <Route path="map" element={<ServerMap />} />
+        </Routes>
+      </div>
+    </div>
   </BrowserRouter>
 );
 
