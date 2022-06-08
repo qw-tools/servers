@@ -5,7 +5,7 @@ import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
 
 export const App = () => (
-  <BrowserRouter>
+  <BrowserRouter basename="/qw-server-overview/">
     <div className="AppContainer">
       <div className="AppHeader">
         <div>
