@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import flatten from "flat";
-import _pick from "lodash.pick";
+import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+
+const serversAdapter = createEntityAdapter({
+  selectId: (server) => server.Address,
+  sortComparer: (a, b) => a.Address.localeCompare(b.Address),
+});
+const initialState = serversAdapter.getInitialState();
 
 export const qwsSlice = createApi({
   reducerPath: "qws",
@@ -10,55 +15,23 @@ export const qwsSlice = createApi({
   endpoints: (builder) => ({
     getServers: builder.query({
       query: () => "servers",
-      transformResponse: (r) => transformServers(r),
+      transformResponse: (responseData) =>
+        serversAdapter.setAll(initialState, responseData),
     }),
   }),
 });
 
 export const { useGetServersQuery } = qwsSlice;
 
-const transformServers = (servers) => {
-  const result = [];
-  const includedSettings = [
-    "*admin",
-    "*gamedir",
-    "ktxver",
-    "sv_antilag",
-    "maxclients",
-    "maxspectators",
-  ];
+export const selectServersResult =
+  qwsSlice.endpoints.getServers.select(undefined);
 
-  for (let i = 0; i < servers.length; i++) {
-    const { Address, Version, Settings = {}, ExtraInfo } = servers[i];
-    result.push({
-      Hostname: Settings["hostname"].replaceAll(".", "&#46;"),
-      Address,
-      ...flatten(versionToObject(Version)),
-      ...flatten(_pick(Settings, includedSettings)),
-      ...flatten(_pick(ExtraInfo["Geo"], ["Region", "Country", "City"])),
-      Coordinates: ExtraInfo["Geo"]["Coordinates"],
-    });
-  }
+export const selectServersData = createSelector(
+  [selectServersResult],
+  (result) => result.data
+);
 
-  return result;
-};
-
-const versionToObject = (version) => {
-  let type;
-  let build = "";
-
-  if (version.includes(" ")) {
-    const versionParts = version.split(" ");
-    type = versionParts[0];
-    build = version;
-  } else {
-    type = version;
-  }
-
-  return {
-    Version: {
-      type,
-      build,
-    },
-  };
-};
+export const { selectAll: selectAllServers, selectById: selectServerById } =
+  serversAdapter.getSelectors(
+    (state) => selectServersData(state) ?? initialState
+  );

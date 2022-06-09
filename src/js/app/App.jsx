@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
+import store from "./store.js";
+import { qwsSlice } from "../services/qws.js";
 import { ServerMap } from "../features/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
@@ -7,6 +9,8 @@ import "../../styles/index.scss";
 export const App = () => {
   const basename =
     "development" === import.meta.env.MODE ? "" : "/qw-server-overview/";
+
+  store.dispatch(qwsSlice.endpoints.getServers.initiate());
 
   return (
     <BrowserRouter basename={basename}>
