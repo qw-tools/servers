@@ -57,6 +57,7 @@ export const ServerMap = () => {
       style={{ height: "100%" }}
       center={[30, 0]}
       zoom={3}
+      minZoom={3}
       maxZoom={6}
     >
       <TileLayer
