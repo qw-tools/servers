@@ -85,13 +85,7 @@ const ServerListItem = (props) => {
           secondary={
             <React.Fragment>
               {hostname_parsed}
-
-              <IconButton
-                onClick={() => copyToClipboard(hostname_parsed)}
-                title="Copy IP to clipboard"
-              >
-                <ContentCopyIcon fontSize="small" />
-              </IconButton>
+              <CopyIpButton ip={hostname_parsed} />
             </React.Fragment>
           }
         />
@@ -99,6 +93,15 @@ const ServerListItem = (props) => {
     </React.Fragment>
   );
 };
+
+const CopyIpButton = (props) => (
+  <IconButton
+    onClick={() => copyToClipboard(props.ip)}
+    title="Copy IP to clipboard"
+  >
+    <ContentCopyIcon fontSize="small" />
+  </IconButton>
+);
 
 export const ServerMap = () => {
   const servers = useSelector(selectFilteredServers);
@@ -132,11 +135,13 @@ const MarkerMemo = React.memo((props) => (
     <Popup>
       <ul>
         {props.info.map((info, index) => (
-          <li key={index}>{info}</li>
+          <li key={index}>
+            {info} <CopyIpButton ip={info.split(" - ")[1]} />
+          </li>
         ))}
       </ul>
     </Popup>
-    <Tooltip>{props.info.length} servers</Tooltip>
+    <Tooltip>{props.info.length} servers/ports</Tooltip>
   </Marker>
 ));
 
