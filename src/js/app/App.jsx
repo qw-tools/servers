@@ -25,7 +25,10 @@ export const App = () => (
           </NavLink>
         </div>
         <div>
-          source: <a href="https://github.com/vikpe/qw-server-overview">github.com/vikpe/qw-server-overview</a>
+          source:{" "}
+          <a href="https://github.com/vikpe/qw-server-overview">
+            github.com/vikpe/qw-server-overview
+          </a>
         </div>
       </div>
       <div className="AppBody">
