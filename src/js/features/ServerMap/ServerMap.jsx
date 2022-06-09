@@ -172,7 +172,6 @@ const createMarkerGroups = (servers) => {
   markerGroups = Object.values(markerGroups);
 
   for (let i = 0; i < markerGroups.length; i++) {
-    markerGroups[i]["info"].sort();
     markerGroups[i]["approxCoordinates"] = approxCoordinates(
       markerGroups[i]["coordinates"]
     );
