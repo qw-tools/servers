@@ -27,7 +27,7 @@ export const ServerMap = () => {
         <MarkerMemo
           key={index}
           coordinates={group["approxCoordinates"]}
-          hostnames={group["hostnames"]}
+          info={group["info"]}
         />
       ))}
     </MapContainer>
@@ -38,12 +38,12 @@ const MarkerMemo = React.memo((props) => (
   <Marker position={props.coordinates}>
     <Popup>
       <ul>
-        {props.hostnames.map((h) => (
-          <li key={h}>{h}</li>
+        {props.info.map((info, index) => (
+          <li key={index}>{info}</li>
         ))}
       </ul>
     </Popup>
-    <Tooltip>{props.hostnames.length} servers</Tooltip>
+    <Tooltip>{props.info.length} servers</Tooltip>
   </Marker>
 ));
 
@@ -59,20 +59,22 @@ const createMarkerGroups = (servers) => {
       markerGroups[key] = {
         approxCoordinates: [],
         coordinates: [],
-        hostnames: [],
+        info: [],
       };
     }
 
     markerGroups[key]["coordinates"].push(coordinates);
-    markerGroups[key]["hostnames"].push(
-      servers[i]["Settings"]["hostname"].replaceAll("&#46;", ".")
+    markerGroups[key]["info"].push(
+      servers[i]["Settings"]["hostname"].replaceAll("&#46;", ".") +
+        " - " +
+        servers[i]["Settings"]["hostname_parsed"]
     );
   }
 
   markerGroups = Object.values(markerGroups);
 
   for (let i = 0; i < markerGroups.length; i++) {
-    markerGroups[i]["hostnames"].sort();
+    markerGroups[i]["info"].sort();
     markerGroups[i]["approxCoordinates"] = approxCoordinates(
       markerGroups[i]["coordinates"]
     );
