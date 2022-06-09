@@ -47,7 +47,7 @@ export const ServerMapPage = () => (
     <Grid item xs={10}>
       <ServerMap />
     </Grid>
-    <Grid item xs={2}>
+    <Grid item xs={2} style={{boxShadow: "-4px 3px 4px rgb(0,0,0,13%)", zIndex: 5555}}>
       <List dense style={{ paddingBottom: 0 }}>
         <ListItem>
           <QueryInputComponent />
