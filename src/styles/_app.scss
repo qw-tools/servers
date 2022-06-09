@@ -1,21 +1,25 @@
-.AppContainer {
-  display: grid;
-  grid-template-rows: 48px auto;
-  height: 100%;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.AppHeader {
+.app-header {
   display: flex;
+  min-height: 48px;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 2px solid #ccc;
+  background-color: #fff;
+  box-shadow: 1px 1px 5px 0 rgb(10 10 10 / 13%), 0 2px 1px -1px rgb(10 10 10 / 13%);
+  z-index: 666;
+
+  a.selected {
+    font-weight: bold;
+  }
 }
 
-.AppBody {
-  background-color: #ddd;
-}
-
-a.selected {
-  font-weight: bold;
+.app-body {
+  flex-grow: 1;
 }

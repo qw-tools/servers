@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import store from "./store.js";
 import { qwsSlice } from "../services/qws.js";
-import { ServerMap } from "../features/ServerMap.jsx";
+import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
 
@@ -14,8 +14,8 @@ export const App = () => {
 
   return (
     <BrowserRouter basename={basename}>
-      <div className="AppContainer">
-        <div className="AppHeader">
+      <div className="app-container">
+        <div className="app-header">
           <div>
             Display as:{" "}
             <NavLink
@@ -39,10 +39,10 @@ export const App = () => {
             </a>
           </div>
         </div>
-        <div className="AppBody">
+        <div className="app-body">
           <Routes>
             <Route path="/" element={<ServerTable />} />
-            <Route path="map" element={<ServerMap />} />
+            <Route path="map" element={<ServerMapPage />} />
           </Routes>
         </div>
       </div>
