@@ -1,22 +1,3 @@
-.AppContainer {
-  display: grid;
-  grid-template-rows: 48px auto;
-  height: 100%;
-}
+@import "app";
+@import "leaflet_custom";
 
-
-.AppHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 2px solid #ccc;
-}
-
-.AppBody {
-  background-color: #ddd;
-}
-
-a.selected {
-  font-weight: bold;
-}
