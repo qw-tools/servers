@@ -1,5 +1,11 @@
 .leaflet-popup-content {
-  width: 400px !important;
+  width: 460px !important;
   max-height: 600px;
   overflow-y: auto;
+  margin: 0;
+}
+
+.leaflet-popup-close-button {
+  margin-top: .3rem;
+  margin-right: .3rem;
 }
