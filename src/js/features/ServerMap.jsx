@@ -15,13 +15,11 @@ const approxCoordinates = (coordinates) => {
   ];
 };
 
-export const ServerMap = () => {
-  const { data = [] } = useGetServersQuery({});
-
+const createMarkerGroups = (servers) => {
   let markerGroups = {};
 
-  for (let i = 0; i < data.length; i++) {
-    let approxCoordinates = data[i].Coordinates.map(Math.round);
+  for (let i = 0; i < servers.length; i++) {
+    let approxCoordinates = servers[i].Coordinates.map(Math.round);
     let key = approxCoordinates.join(" ");
 
     if (!(key in markerGroups)) {
@@ -32,9 +30,9 @@ export const ServerMap = () => {
       };
     }
 
-    markerGroups[key]["coordinates"].push(data[i]["Coordinates"]);
+    markerGroups[key]["coordinates"].push(servers[i]["Coordinates"]);
     markerGroups[key]["hostnames"].push(
-      data[i]["Hostname"].replaceAll("&#46;", ".")
+      servers[i]["Hostname"].replaceAll("&#46;", ".")
     );
   }
 
@@ -46,6 +44,13 @@ export const ServerMap = () => {
       markerGroups[i]["coordinates"]
     );
   }
+
+  return markerGroups;
+};
+
+export const ServerMap = () => {
+  const { data = [] } = useGetServersQuery({});
+  const markerGroups = createMarkerGroups(data);
 
   return (
     <MapContainer
