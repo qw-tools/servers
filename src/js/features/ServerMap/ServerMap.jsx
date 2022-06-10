@@ -145,12 +145,20 @@ const MarkerMemo = React.memo((props) => (
   </Marker>
 ));
 
+function roundToStep(value, step) {
+  step || (step = 1.0);
+  const inv = 1.0 / step;
+  return Math.round(value * inv) / inv;
+}
+
 const createMarkerGroups = (servers) => {
   let markerGroups = {};
 
   for (let i = 0; i < servers.length; i++) {
     let coordinates = servers[i]["ExtraInfo"]["Geo"]["Coordinates"];
-    let approxCoordinates = coordinates.map(Math.round);
+    let approxCoordinates = coordinates.map((c) =>
+      Math.round(roundToStep(c, 0.8))
+    );
     let key = approxCoordinates.join(" ");
 
     if (!(key in markerGroups)) {
