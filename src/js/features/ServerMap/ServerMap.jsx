@@ -117,7 +117,7 @@ export const ServerMap = () => {
       center={[30, 0]}
       zoom={3}
       minZoom={3}
-      maxZoom={6}
+      maxZoom={7}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
