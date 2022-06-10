@@ -160,7 +160,7 @@ const createMarkerGroups = (servers) => {
 
   for (let i = 0; i < servers.length; i++) {
     let coordinates = servers[i]["ExtraInfo"]["Geo"]["Coordinates"];
-    let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.8));
+    let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.5));
     let key = approxCoordinates.join(" ");
 
     if (!(key in markerGroups)) {
@@ -171,6 +171,7 @@ const createMarkerGroups = (servers) => {
       };
     }
 
+    markerGroups[key]["key"] = key;
     markerGroups[key]["coordinates"].push(coordinates);
     markerGroups[key]["info"].push(
       servers[i]["Settings"]["hostname"].replaceAll("&#46;", ".") +
