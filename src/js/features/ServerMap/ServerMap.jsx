@@ -160,9 +160,7 @@ const createMarkerGroups = (servers) => {
 
   for (let i = 0; i < servers.length; i++) {
     let coordinates = servers[i]["ExtraInfo"]["Geo"]["Coordinates"];
-    let approxCoordinates = coordinates.map((c) =>
-      Math.round(roundToStep(c, 0.8))
-    );
+    let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.8));
     let key = approxCoordinates.join(" ");
 
     if (!(key in markerGroups)) {
@@ -184,19 +182,20 @@ const createMarkerGroups = (servers) => {
   markerGroups = Object.values(markerGroups);
 
   for (let i = 0; i < markerGroups.length; i++) {
-    markerGroups[i]["approxCoordinates"] = approxCoordinates(
+    markerGroups[i]["approxCoordinates"] = calcAverageCoordinates(
       markerGroups[i]["coordinates"]
     );
+    delete markerGroups[i]["coordinates"];
   }
 
   return markerGroups;
 };
 
-const approxCoordinates = (coordinates) => {
-  return [
-    coordinates.reduce((partialSum, c) => partialSum + c[0], 0) /
-      coordinates.length,
-    coordinates.reduce((partialSum, c) => partialSum + c[1], 0) /
-      coordinates.length,
-  ];
+const arraySum = (arr) => arr.reduce((partialSum, a) => partialSum + a, 0);
+const arrayAverage = (arr) => arraySum(arr) / arr.length;
+
+const calcAverageCoordinates = (coordinates) => {
+  const lats = coordinates.map((c) => c[0]);
+  const longs = coordinates.map((c) => c[1]);
+  return [lats, longs].map(arrayAverage);
 };
