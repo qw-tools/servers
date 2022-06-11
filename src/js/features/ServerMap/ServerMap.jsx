@@ -16,6 +16,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { updateFilters } from "../../app/filtersSlice.js";
 import copyToClipboard from "copy-text-to-clipboard";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import _debounce from "lodash.debounce";
 
 const QueryInput = (props) => {
   const { query, updateFilters } = props;
@@ -27,13 +28,15 @@ const QueryInput = (props) => {
     updateFilters({ query });
   };
 
+  const _handleChange = _debounce(handleChange, 250);
+
   return (
     <TextField
       fullWidth
       type="search"
       label="Search"
       defaultValue={query}
-      onChange={handleChange}
+      onChange={_handleChange}
     />
   );
 };
