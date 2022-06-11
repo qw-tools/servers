@@ -159,7 +159,7 @@ const createMarkerGroups = (servers) => {
   let markerGroups = {};
 
   for (let i = 0; i < servers.length; i++) {
-    let coordinates = servers[i]["ExtraInfo"]["Geo"]["Coordinates"];
+    let coordinates = servers[i]["Geo"]["Coordinates"];
     let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.5));
     let key = approxCoordinates.join(" ");
 

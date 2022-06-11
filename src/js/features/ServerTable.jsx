@@ -20,24 +20,19 @@ export const ServerTable = () => {
 
 const toFlatData = (servers) => {
   const result = [];
-  const includedSettings = [
-    "*admin",
-    "*gamedir",
-    "ktxver",
-    "sv_antilag",
-    "maxclients",
-    "maxspectators",
-  ];
+  const includedSettings = ["maxclients", "maxspectators"];
 
   for (let i = 0; i < servers.length; i++) {
-    const { Address, Version, Settings = {}, ExtraInfo } = servers[i];
+    const { Address, Version, Settings, Geo } = servers[i];
     result.push({
       Hostname: Settings["hostname"].replaceAll(".", "&#46;"),
       Address,
+      Admin: Settings["*admin"],
+      Gamedir: Settings["*gamedir"],
       ...flatten(versionToObject(Version)),
+      Antilag: Settings["sv_antilag"],
       ...flatten(_pick(Settings, includedSettings)),
-      ...flatten(_pick(ExtraInfo["Geo"], ["Region", "Country", "City"])),
-      Coordinates: ExtraInfo["Geo"]["Coordinates"],
+      ...flatten(_pick(Geo, ["Region", "Country", "City"])),
     });
   }
 
