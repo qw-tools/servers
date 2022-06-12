@@ -7,17 +7,12 @@
 
 .app-header {
   display: flex;
-  min-height: 48px;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   background-color: #fff;
   box-shadow: 1px 1px 5px 0 rgb(10 10 10 / 13%), 0 2px 1px -1px rgb(10 10 10 / 13%);
   z-index: 666;
-
-  a.selected {
-    font-weight: bold;
-  }
 }
 
 .app-body {

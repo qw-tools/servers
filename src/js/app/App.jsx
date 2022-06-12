@@ -1,6 +1,12 @@
 import React from "react";
-import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import store from "./store.js";
+import Button from "@mui/material/Button";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import ListIcon from "@mui/icons-material/List";
+import PublicIcon from "@mui/icons-material/Public";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import { qwsSlice } from "../services/qws.js";
 import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
@@ -15,30 +21,7 @@ export const App = () => {
   return (
     <BrowserRouter basename={basename}>
       <div className="app-container">
-        <div className="app-header">
-          <div>
-            Display as:{" "}
-            <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? "selected" : undefined)}
-            >
-              List
-            </NavLink>{" "}
-            |{" "}
-            <NavLink
-              to="map"
-              className={({ isActive }) => (isActive ? "selected" : undefined)}
-            >
-              Map
-            </NavLink>
-          </div>
-          <div>
-            source:{" "}
-            <a href="https://github.com/vikpe/qw-server-overview">
-              github.com/vikpe/qw-server-overview
-            </a>
-          </div>
-        </div>
+        <AppHeader />
         <div className="app-body">
           <Routes>
             <Route path="/" element={<ServerTable />} />
@@ -51,3 +34,43 @@ export const App = () => {
 };
 
 export default App;
+
+const AppHeader = () => {
+  const headerItems = [
+    {
+      label: "View as List",
+      icon: <ListIcon />,
+      url: "/",
+    },
+    {
+      label: "View on Map",
+      icon: <PublicIcon />,
+      url: "/map",
+    },
+  ];
+
+  return (
+    <div className="app-header">
+      <Tabs value={location.pathname}>
+        {headerItems.map((item) => (
+          <Tab
+            key={item.url}
+            label={item.label}
+            icon={item.icon}
+            iconPosition="start"
+            component={Link}
+            to={item.url}
+            value={item.url}
+            onClick={() => history.push(item.url)}
+          />
+        ))}
+      </Tabs>
+      <Button
+        startIcon={<GitHubIcon />}
+        href="https://github.com/vikpe/qw-server-overview"
+      >
+        Source
+      </Button>
+    </div>
+  );
+};
