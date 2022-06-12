@@ -61,12 +61,12 @@ const NavTabs = () => {
     {
       label: "View as List",
       icon: <ListIcon />,
-      url: getBasename() + "/",
+      url: "/",
     },
     {
       label: "View on Map",
       icon: <PublicIcon />,
-      url: getBasename() + "/map",
+      url: "/map",
     },
   ];
 
