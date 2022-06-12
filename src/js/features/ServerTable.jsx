@@ -12,8 +12,8 @@ export const ServerTable = () => {
   return (
     <Grid
       data={flatData}
-      defaultStickyColumnName="Address"
-      defaultSort={["Hostname", "asc"]}
+      defaultStickyColumnName="address"
+      defaultSort={["hostname", "asc"]}
     />
   );
 };
@@ -23,16 +23,16 @@ const toFlatData = (servers) => {
   const includedSettings = ["maxclients", "maxspectators"];
 
   for (let i = 0; i < servers.length; i++) {
-    const { Address, Version, Settings, Geo } = servers[i];
+    const { address, version, settings, geo } = servers[i];
     result.push({
-      Hostname: Settings["hostname"].replaceAll(".", "&#46;"),
-      Address,
-      Admin: Settings["*admin"],
-      ...flatten(versionToObject(Version)),
-      Gamedir: Settings["*gamedir"],
-      Antilag: Settings["sv_antilag"],
-      ...flatten(_pick(Settings, includedSettings)),
-      ...flatten(_pick(Geo, ["Region", "Country", "City"])),
+      hostname: settings["hostname"].replaceAll(".", "&#46;"),
+      address,
+      admin: settings["*admin"],
+      ...flatten(versionToObject(version)),
+      gamedir: settings["*gamedir"],
+      antilag: settings["sv_antilag"],
+      ...flatten(_pick(settings, includedSettings)),
+      ...flatten(_pick(geo, ["region", "country", "city"])),
     });
   }
 
@@ -52,7 +52,7 @@ const versionToObject = (version) => {
   }
 
   return {
-    Version: {
+    version: {
       type,
       build,
     },

@@ -3,9 +3,9 @@ import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import { selectFilters } from "../app/filtersSlice.js";
 
 const serversAdapter = createEntityAdapter({
-  selectId: (server) => server.Address,
+  selectId: (server) => server.address,
   sortComparer: (a, b) =>
-    a.Settings["hostname"].localeCompare(b.Settings["hostname"]),
+    a.settings["hostname"].localeCompare(b.settings["hostname"]),
 });
 const initialState = serversAdapter.getInitialState();
 
@@ -46,5 +46,5 @@ export const selectFilteredServers = createSelector(
 
 const filterServers = (servers, query) =>
   servers.filter((s) =>
-    s.Settings["hostname"].toLowerCase().includes(query.toLowerCase())
+    s.settings["hostname"].toLowerCase().includes(query.toLowerCase())
   );

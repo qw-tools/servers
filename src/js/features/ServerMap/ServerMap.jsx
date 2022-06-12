@@ -72,9 +72,9 @@ const ServerList = () => {
     <List className="app-server-list" dense>
       {servers.map((server) => (
         <ServerListItem
-          key={server.Address}
-          hostname={server.Settings["hostname"]}
-          hostname_parsed={server.Settings["hostname_parsed"]}
+          key={server.address}
+          hostname={server.settings["hostname"]}
+          hostname_parsed={server.settings["hostname_parsed"]}
         />
       ))}
     </List>
@@ -162,7 +162,7 @@ const createMarkerGroups = (servers) => {
   let markerGroups = {};
 
   for (let i = 0; i < servers.length; i++) {
-    let coordinates = servers[i]["Geo"]["Coordinates"];
+    let coordinates = servers[i]["geo"]["coordinates"];
     let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.5));
     let key = approxCoordinates.join(" ");
 
@@ -177,9 +177,9 @@ const createMarkerGroups = (servers) => {
     markerGroups[key]["key"] = key;
     markerGroups[key]["coordinates"].push(coordinates);
     markerGroups[key]["info"].push(
-      servers[i]["Settings"]["hostname"].replaceAll("&#46;", ".") +
+      servers[i]["settings"]["hostname"].replaceAll("&#46;", ".") +
         " - " +
-        servers[i]["Settings"]["hostname_parsed"]
+        servers[i]["settings"]["hostname_parsed"]
     );
   }
 
