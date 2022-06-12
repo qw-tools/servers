@@ -11,6 +11,7 @@ import { qwsSlice } from "../services/qws.js";
 import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
+import { Box } from "@mui/material";
 
 const productionBasename = "/qw-server-overview";
 const getBasename = () =>
@@ -44,7 +45,7 @@ const AppHeader = () => {
         startIcon={<GitHubIcon />}
         href="https://github.com/vikpe/qw-server-overview"
       >
-        Source
+        <Box sx={{ display: { xs: "none", sm: "block" } }}>Source</Box>
       </Button>
     </div>
   );
