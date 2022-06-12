@@ -12,20 +12,21 @@ import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
 
-export const App = () => {
-  const basename =
-    "development" === import.meta.env.MODE ? "" : "/qw-server-overview/";
+const productionBasename = "/qw-server-overview";
+const getBasename = () =>
+  "development" === import.meta.env.MODE ? "" : productionBasename;
 
+export const App = () => {
   store.dispatch(qwsSlice.endpoints.getServers.initiate());
 
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter basename={getBasename()}>
       <div className="app-container">
         <AppHeader />
         <div className="app-body">
           <Routes>
             <Route path="/" element={<ServerTable />} />
-            <Route path="map" element={<ServerMapPage />} />
+            <Route path="/map" element={<ServerMapPage />} />
           </Routes>
         </div>
       </div>
@@ -36,35 +37,9 @@ export const App = () => {
 export default App;
 
 const AppHeader = () => {
-  const headerItems = [
-    {
-      label: "View as List",
-      icon: <ListIcon />,
-      url: "/",
-    },
-    {
-      label: "View on Map",
-      icon: <PublicIcon />,
-      url: "/map",
-    },
-  ];
-
   return (
     <div className="app-header">
-      <Tabs value={location.pathname}>
-        {headerItems.map((item) => (
-          <Tab
-            key={item.url}
-            label={item.label}
-            icon={item.icon}
-            iconPosition="start"
-            component={Link}
-            to={item.url}
-            value={item.url}
-            onClick={() => history.push(item.url)}
-          />
-        ))}
-      </Tabs>
+      <NavTabs />
       <Button
         startIcon={<GitHubIcon />}
         href="https://github.com/vikpe/qw-server-overview"
@@ -72,5 +47,42 @@ const AppHeader = () => {
         Source
       </Button>
     </div>
+  );
+};
+
+const NavTabs = () => {
+  const [tabIndex, setTabIndex] = React.useState(0);
+
+  const handleChange = (_, newIndex) => {
+    setTabIndex(newIndex);
+  };
+
+  const headerItems = [
+    {
+      label: "View as List",
+      icon: <ListIcon />,
+      url: getBasename() + "/",
+    },
+    {
+      label: "View on Map",
+      icon: <PublicIcon />,
+      url: getBasename() + "/map",
+    },
+  ];
+
+  return (
+    <Tabs value={tabIndex} onChange={handleChange}>
+      {headerItems.map((item, index) => (
+        <Tab
+          key={item.url}
+          label={item.label}
+          icon={item.icon}
+          iconPosition="start"
+          component={Link}
+          to={item.url}
+          value={index}
+        />
+      ))}
+    </Tabs>
   );
 };
