@@ -8,7 +8,6 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
-    outDir: "docs",
     chunkSizeWarningLimit: 9999,
   }
 })
