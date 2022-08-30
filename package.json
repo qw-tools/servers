@@ -13,29 +13,29 @@
     "lint": "yarn prettier --write src/js"
   },
   "devDependencies": {
-    "@types/react": "^18.0.12",
-    "@types/react-dom": "^18.0.5",
-    "prettier": "^2.6.2"
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "prettier": "^2.7.1"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@githubocto/flat-ui": "^0.14.1",
-    "@mui/icons-material": "^5.8.3",
-    "@mui/material": "^5.8.3",
-    "@reduxjs/toolkit": "^1.8.2",
-    "@vitejs/plugin-react": "^1.3.2",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.3",
+    "@reduxjs/toolkit": "^1.8.5",
+    "@vitejs/plugin-react": "^2.0.1",
     "copy-text-to-clipboard": "^3.0.1",
     "flat": "^5.0.2",
     "leaflet": "^1.8.0",
     "lodash.debounce": "^4.0.8",
     "lodash.pick": "^4.4.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-leaflet": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.0.2",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
-    "sass": "^1.52.3",
-    "vite": "^2.9.12"
+    "sass": "^1.54.6",
+    "vite": "^3.0.9"
   }
 }
