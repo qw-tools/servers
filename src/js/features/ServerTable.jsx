@@ -31,6 +31,7 @@ const toFlatData = (servers) => {
       ...flatten(versionToObject(version)),
       gamedir: settings["*gamedir"],
       ktxver: settings["ktxver"],
+      mode: settings["mode"],
       antilag: settings["sv_antilag"],
       ...flatten(_pick(settings, includedSettings)),
       ...flatten(_pick(geo, ["region", "country", "city"])),
