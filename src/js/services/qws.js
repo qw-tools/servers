@@ -12,7 +12,7 @@ const initialState = serversAdapter.getInitialState();
 export const qwsSlice = createApi({
   reducerPath: "qws",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://metaqtv.quake.se/v2/",
+    baseUrl: "https://hubapi.quakeworld.nu/v2/",
   }),
   endpoints: (builder) => ({
     getServers: builder.query({
