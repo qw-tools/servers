@@ -26,6 +26,11 @@ const columnDefs = [
   { field: 'city' },
 ].map(d => ({ ...d, ...defaultOptions }));
 
+const gridOptions = {
+  enableCellTextSelection: true,
+  ensureDomOrder: true,
+};
+
 export const ServerTable = () => {
   const servers = useSelector(selectAllServers);
   const flatData = toFlatData(servers);
@@ -33,6 +38,7 @@ export const ServerTable = () => {
   return (
     <div className="ag-theme-alpine" style={{ height: "100%", width: "100%" }}>
       <AgGridReact
+        gridOptions={gridOptions}
         rowData={flatData}
         columnDefs={columnDefs}>
       </AgGridReact>
