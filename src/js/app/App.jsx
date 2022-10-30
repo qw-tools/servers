@@ -7,7 +7,7 @@ import Tab from "@mui/material/Tab";
 import ListIcon from "@mui/icons-material/List";
 import PublicIcon from "@mui/icons-material/Public";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { qwsSlice } from "../services/qws.js";
+import { hubSlice } from "../services/hub.js";
 import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
 import { ServerTable } from "../features/ServerTable.jsx";
 import "../../styles/index.scss";
@@ -18,7 +18,7 @@ const getBasename = () =>
   "development" === import.meta.env.MODE ? "" : productionBasename;
 
 export const App = () => {
-  store.dispatch(qwsSlice.endpoints.getServers.initiate());
+  store.dispatch(hubSlice.endpoints.getServers.initiate());
 
   return (
     <BrowserRouter basename={getBasename()}>

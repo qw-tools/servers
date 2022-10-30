@@ -9,8 +9,8 @@ const serversAdapter = createEntityAdapter({
 });
 const initialState = serversAdapter.getInitialState();
 
-export const qwsSlice = createApi({
-  reducerPath: "qws",
+export const hubSlice = createApi({
+  reducerPath: "hub",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://hubapi.quakeworld.nu/v2/",
   }),
@@ -23,10 +23,10 @@ export const qwsSlice = createApi({
   }),
 });
 
-//export const { useGetServersQuery } = qwsSlice;
+//export const { useGetServersQuery } = hubSlice;
 
 export const selectServersResult =
-  qwsSlice.endpoints.getServers.select(undefined);
+  hubSlice.endpoints.getServers.select(undefined);
 
 export const selectServersData = createSelector(
   [selectServersResult],
