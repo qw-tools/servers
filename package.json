@@ -23,6 +23,7 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.11",
     "@reduxjs/toolkit": "^1.8.6",
+    "@tanstack/react-query": "^4.13.4",
     "@vitejs/plugin-react": "^2.2.0",
     "ag-grid-community": "^28.2.0",
     "ag-grid-react": "^28.2.0",
@@ -36,6 +37,7 @@
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "sass": "^1.55.0",
+    "timeago.js": "^4.0.2",
     "vite": "^3.2.1"
   }
 }

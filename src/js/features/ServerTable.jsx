@@ -42,7 +42,6 @@ export const ServerTable = () => {
 
 const toFlatData = (servers) => {
   const result = [];
-  const includedSettings = ["maxclients", "maxspectators"];
 
   for (let i = 0; i < servers.length; i++) {
     const { address, version, settings, geo } = servers[i];
@@ -51,11 +50,7 @@ const toFlatData = (servers) => {
       address,
       admin: settings["*admin"],
       version,
-      gamedir: settings["*gamedir"],
-      ktxver: settings["ktxver"],
-      mode: settings["mode"],
-      antilag: settings["sv_antilag"],
-      ..._pick(settings, includedSettings),
+      ..._pick(settings, ["*gamedir", "ktxver", "mode", "sv_antilag", "maxclients", "maxspectators"]),
       ..._pick(geo, ["region", "country", "city"]),
     });
   }
@@ -63,22 +58,4 @@ const toFlatData = (servers) => {
   console.log(result[0]);
 
   return result;
-};
-
-const versionToObject = (version) => {
-  let type;
-  let build = "";
-
-  if (version.includes(" ")) {
-    const versionParts = version.split(" ");
-    type = versionParts[0];
-    build = version;
-  } else {
-    type = version;
-  }
-
-  return {
-    type,
-    build,
-  };
 };

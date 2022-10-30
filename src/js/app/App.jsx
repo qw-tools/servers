@@ -9,9 +9,9 @@ import PublicIcon from "@mui/icons-material/Public";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { hubSlice } from "../services/hub.js";
 import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
-import { ServerTable } from "../features/ServerTable.jsx";
-import "../../styles/index.scss";
 import { Box } from "@mui/material";
+import { ServerList } from "../features/ServerList";
+import "../../styles/index.scss";
 
 const productionBasename = "/qw-server-overview";
 const getBasename = () =>
@@ -26,7 +26,7 @@ export const App = () => {
         <AppHeader />
         <div className="app-body">
           <Routes>
-            <Route path="/" element={<ServerTable />} />
+            <Route path="/" element={<ServerList />} />
             <Route path="/map" element={<ServerMapPage />} />
           </Routes>
         </div>
