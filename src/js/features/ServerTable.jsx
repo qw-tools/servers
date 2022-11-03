@@ -47,7 +47,9 @@ export const ServerTable = () => {
       <AgGridReact
         gridOptions={gridOptions}
         rowData={flatData}
-        columnDefs={columnDefs}>
+        columnDefs={columnDefs}
+        onGridReady={applyQueryParams}
+      >
       </AgGridReact>
     </div>
   );
@@ -63,10 +65,39 @@ const toFlatData = (servers) => {
       address,
       admin: settings["*admin"],
       version,
-      ..._pick(settings, ["*gamedir", "ktxver", "sv_antilag", "maxclients", "maxspectators"]),
+      gamedir: settings["*gamedir"],
+      ..._pick(settings, ["ktxver", "sv_antilag"]),
       ...geo,
     });
   }
 
   return result;
 };
+
+const applyQueryParams = event => {
+  if (0 === window.location.search.length) {
+    return
+  }
+
+  const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  const fieldNames = event.api.columnModel.columnDefs.map(d => d.field);
+  let hasChangedFilters = false;
+
+  fieldNames.forEach(key => {
+    if (params[key]) {
+      const filterInstance = event.api.getFilterInstance(key);
+      filterInstance.setModel({
+        type: "text",
+        filter: params[key],
+      });
+      hasChangedFilters = true;
+    }
+  });
+
+  if (hasChangedFilters) {
+    event.api.onFilterChanged();
+  }
+}
