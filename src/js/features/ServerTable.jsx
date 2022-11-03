@@ -21,7 +21,17 @@ const columnDefs = [
   { field: '*gamedir', width: 140, },
   { field: 'sv_antilag', width: 100, },
   { field: 'region', width: 170, },
-  { field: 'country', width: 160, },
+  {
+    field: 'country', width: 160, cellRenderer: (params) => {
+      return (
+        <span>
+          <img src={`https://www.quakeworld.nu/images/flags/${(params.data.cc.toLowerCase())}.gif`} width={16}
+               height={11} />
+          {' '}{params.value}
+        </span>
+      );
+    },
+  },
   { field: 'city', width: 180 },
 ].map(d => ({ ...d, ...defaultOptions }));
 
@@ -56,7 +66,7 @@ const toFlatData = (servers) => {
       admin: settings["*admin"],
       version,
       ..._pick(settings, ["*gamedir", "ktxver", "sv_antilag", "maxclients", "maxspectators"]),
-      ..._pick(geo, ["region", "country", "city"]),
+      ...geo,
     });
   }
 
