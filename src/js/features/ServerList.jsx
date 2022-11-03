@@ -5,8 +5,8 @@ import { LatestSoftware } from "./LatestSoftware";
 export const ServerList = () => {
   return (
     <>
-      <LatestSoftware />
       <ServerTable />
+      <LatestSoftware />
     </>
   )
 };
