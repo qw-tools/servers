@@ -17,13 +17,12 @@ const columnDefs = [
   { field: 'address' },
   { field: 'admin' },
   { field: 'version' },
-  { field: 'gamedir' },
   { field: 'ktxver' },
-  { field: 'mode' },
-  { field: 'antilag' },
-  { field: 'region' },
-  { field: 'country' },
-  { field: 'city' },
+  { field: '*gamedir', width: 140, },
+  { field: 'sv_antilag', width: 100, },
+  { field: 'region', width: 170, },
+  { field: 'country', width: 160, },
+  { field: 'city', width: 180 },
 ].map(d => ({ ...d, ...defaultOptions }));
 
 const gridOptions = {
@@ -56,7 +55,7 @@ const toFlatData = (servers) => {
       address,
       admin: settings["*admin"],
       version,
-      ..._pick(settings, ["*gamedir", "ktxver", "mode", "sv_antilag", "maxclients", "maxspectators"]),
+      ..._pick(settings, ["*gamedir", "ktxver", "sv_antilag", "maxclients", "maxspectators"]),
       ..._pick(geo, ["region", "country", "city"]),
     });
   }
