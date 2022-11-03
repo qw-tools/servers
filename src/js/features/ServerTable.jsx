@@ -13,7 +13,15 @@ const defaultOptions = {
 }
 
 const columnDefs = [
-  { field: 'hostname' },
+  {
+    field: 'hostname', width: 260, cellRenderer: (params) => (
+      <span title={params.value}>
+          <img src={`https://www.quakeworld.nu/images/flags/${(params.data.cc.toLowerCase())}.gif`} width={16}
+               height={11} alt="" />
+        {' '}{params.value}
+      </span>
+    )
+  },
   { field: 'address' },
   { field: 'admin' },
   { field: 'version' },
@@ -21,17 +29,7 @@ const columnDefs = [
   { field: '*gamedir', width: 140, },
   { field: 'sv_antilag', width: 100, },
   { field: 'region', width: 170, },
-  {
-    field: 'country', width: 160, cellRenderer: (params) => {
-      return (
-        <span>
-          <img src={`https://www.quakeworld.nu/images/flags/${(params.data.cc.toLowerCase())}.gif`} width={16}
-               height={11} />
-          {' '}{params.value}
-        </span>
-      );
-    },
-  },
+  { field: 'country', width: 160 },
   { field: 'city', width: 180 },
 ].map(d => ({ ...d, ...defaultOptions }));
 
