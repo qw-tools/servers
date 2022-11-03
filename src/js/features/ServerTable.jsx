@@ -60,7 +60,5 @@ const toFlatData = (servers) => {
     });
   }
 
-  console.log(result[0]);
-
   return result;
 };
