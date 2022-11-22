@@ -5,7 +5,7 @@ import { selectFilters } from "../app/filtersSlice.js";
 const serversAdapter = createEntityAdapter({
   selectId: (server) => server.address,
   sortComparer: (a, b) =>
-    a.settings["hostname"].localeCompare(b.settings["hostname"]),
+    (a.settings["hostname"] || "").localeCompare(b.settings["hostname"] || ""),
 });
 const initialState = serversAdapter.getInitialState();
 
