@@ -26,7 +26,7 @@ export const hubSlice = createApi({
           }
         }
         return serversAdapter.setAll(initialState, responseData);
-      }
+      },
     }),
   }),
 });

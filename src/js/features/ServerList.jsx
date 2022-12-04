@@ -8,5 +8,5 @@ export const ServerList = () => {
       <ServerTable />
       <LatestSoftware />
     </>
-  )
+  );
 };
