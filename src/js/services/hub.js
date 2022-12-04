@@ -5,7 +5,7 @@ import { selectFilters } from "../app/filtersSlice.js";
 const serversAdapter = createEntityAdapter({
   selectId: (server) => server.address,
   sortComparer: (a, b) =>
-    (a.settings["hostname"] || "").localeCompare(b.settings["hostname"] || ""),
+    a.settings["hostname"].localeCompare(b.settings["hostname"]),
 });
 const initialState = serversAdapter.getInitialState();
 
@@ -17,8 +17,16 @@ export const hubSlice = createApi({
   endpoints: (builder) => ({
     getServers: builder.query({
       query: () => "servers",
-      transformResponse: (responseData) =>
-        serversAdapter.setAll(initialState, responseData),
+      transformResponse: (responseData) => {
+        for (let i = 0; i < responseData.length; i++) {
+          let server = responseData[i]["settings"];
+          if (!("hostname" in server)) {
+            server["hostname"] = responseData[i]["address"];
+            server["hostname_parsed"] = responseData[i]["address"];
+          }
+        }
+        return serversAdapter.setAll(initialState, responseData);
+      }
     }),
   }),
 });
