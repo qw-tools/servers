@@ -7,10 +7,12 @@ import Tab from "@mui/material/Tab";
 import ListIcon from "@mui/icons-material/List";
 import PublicIcon from "@mui/icons-material/Public";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { hubSlice } from "../services/hub.js";
-import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
+import TimelineIcon from "@mui/icons-material/Timeline";
 import { Box } from "@mui/material";
+import { hubSlice } from "../services/hub.js";
 import { ServerList } from "../features/ServerList";
+import { ServerMapPage } from "../features/ServerMap/ServerMap.jsx";
+import { ServerStatsPage } from "../features/ServerStats/ServerStats.jsx";
 import "../../styles/index.scss";
 
 const productionBasename = "/qw-server-overview";
@@ -28,6 +30,7 @@ export const App = () => {
           <Routes>
             <Route path="/" element={<ServerList />} />
             <Route path="/map" element={<ServerMapPage />} />
+            <Route path="/statistics" element={<ServerStatsPage />} />
           </Routes>
         </div>
       </div>
@@ -60,14 +63,19 @@ const NavTabs = () => {
 
   const headerItems = [
     {
-      label: "View as List",
+      label: "Server Details",
       icon: <ListIcon />,
       url: "/",
     },
     {
-      label: "View on Map",
+      label: "Server Map",
       icon: <PublicIcon />,
       url: "/map",
+    },
+    {
+      label: "Server Statistics",
+      icon: <TimelineIcon />,
+      url: "/statistics",
     },
   ];
 
