@@ -135,9 +135,8 @@ const ServerChart = (props) => {
       {
         getValue: (d) => d.y,
         min: 0,
-        //max: 10,
+        max: 8, // todo: perhaps remove
         show: false,
-        //showDatumElements: false,
       },
     ],
     []
