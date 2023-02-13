@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build --base=https://vikpe.org/qw-server-overview/",
     "preview": "vite preview",
-    "lint": "yarn prettier --write src/js"
+    "format": "yarn prettier --write src/js"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
