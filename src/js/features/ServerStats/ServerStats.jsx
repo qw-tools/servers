@@ -1,8 +1,12 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import _sortBy from "lodash.sortby";
+import _keyBy from "lodash.keyby";
 import { Chart } from "react-charts";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectAllServers } from "../../services/hub.js";
+import { Flag, Debug } from "../../components/Common.jsx";
 
 const USAGE_URL =
   "https://raw.githubusercontent.com/vikpe/qw-data/main/hubapi/server_usage.json";
@@ -39,6 +43,9 @@ function getDataPoints(dateRange, serverUsage) {
 }
 
 export const ServerStatsPage = () => {
+  const serverDetailsArr = useSelector(selectAllServers).filter((s) => {
+    return s.version.toLowerCase().includes("mvdsv");
+  });
   const [usage, setUsage] = useState({});
 
   useEffect(() => {
@@ -47,15 +54,17 @@ export const ServerStatsPage = () => {
       .then((usage) => setUsage(usage));
   }, []);
 
-  const serverUsage = _sortBy(Object.values(usage), (o) =>
-    o.hostname.toLowerCase()
-  );
+  const usageByHp = Object.keys(usage);
 
-  if (0 === serverUsage.length) {
-    return <Fragment />;
+  if (0 === usageByHp.length || 0 === serverDetailsArr.length) {
+    return <Box p={2}>loading...</Box>;
   }
 
-  const dateRange = getDateRange(serverUsage);
+  const dateRange = getDateRange(Object.values(usage));
+  const serverDetailsByHp = _keyBy(
+    serverDetailsArr,
+    "settings.hostname_parsed"
+  );
 
   return (
     <div>
@@ -66,26 +75,48 @@ export const ServerStatsPage = () => {
         </small>
       </Box>
 
-      {serverUsage.map((u) => (
-        <ServerStats
-          key={u.hostname}
-          hostname={u.hostname}
-          server_usage={u.player_count}
-          dateRange={dateRange}
-        />
+      {Object.entries(serverDetailsByHp).map(([hp, details], index) => (
+        <Grid
+          key={index}
+          container
+          alignItems="center"
+          px={2}
+          py={0.5}
+          borderTop={"1px solid #ddd"}
+          className={"app-server-usage-grid"}
+        >
+          <Grid item xs={0} md={4} xl={3}>
+            <span style={{ fontSize: ".8rem" }}>
+              <Flag cc={details.geo.cc} /> {details.settings.hostname}
+            </span>
+          </Grid>
+          {usageByHp.includes(hp) && (
+            <Grid
+              item
+              xs={12}
+              md={8}
+              xl={9}
+              style={{ backgroundColor: "#f0f7fa" }}
+            >
+              <ServerChart
+                points={getDataPoints(dateRange, usage[hp].player_count)}
+              />
+            </Grid>
+          )}
+        </Grid>
       ))}
     </div>
   );
 };
 
-const ServerStats = (props) => {
-  const { hostname, server_usage, dateRange } = props;
+const ServerChart = (props) => {
+  const { points } = props;
 
   const data = useMemo(
     () => [
       {
         label: "Player count",
-        data: getDataPoints(dateRange, server_usage),
+        data: points,
       },
     ],
     []
@@ -120,22 +151,8 @@ const ServerStats = (props) => {
   };
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      px={2}
-      py={0.5}
-      borderTop={"1px solid #ddd"}
-      className={"app-server-usage-grid"}
-    >
-      <Grid item xs={0} md={4} xl={3}>
-        <span style={{ fontSize: ".8rem" }}>{hostname}</span>
-      </Grid>
-      <Grid item xs={12} md={8} xl={9}>
-        <div style={{ height: CHART_OPTIONS.initialHeight }}>
-          <Chart options={options} />
-        </div>
-      </Grid>
-    </Grid>
+    <div style={{ height: CHART_OPTIONS.initialHeight }}>
+      <Chart options={options} />
+    </div>
   );
 };

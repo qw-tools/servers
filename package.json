@@ -30,6 +30,7 @@
     "copy-text-to-clipboard": "^3.0.1",
     "leaflet": "^1.9.3",
     "lodash.debounce": "^4.0.8",
+    "lodash.keyby": "^4.6.0",
     "lodash.pick": "^4.4.0",
     "lodash.sortby": "^4.7.0",
     "react": "^18.2.0",
