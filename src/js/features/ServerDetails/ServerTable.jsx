@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectAllServers } from "../services/hub.js";
+import { selectAllServers } from "../../services/hub.js";
 import { AgGridReact } from "ag-grid-react";
 import _pick from "lodash.pick";
 
