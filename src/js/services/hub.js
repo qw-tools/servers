@@ -52,7 +52,12 @@ export const selectFilteredServers = createSelector(
     "" === filters.query ? servers : filterServers(servers, filters.query)
 );
 
-const filterServers = (servers, query) =>
-  servers.filter((s) =>
-    s.settings["hostname"].toLowerCase().includes(query.toLowerCase())
-  );
+const filterServers = (servers, query) => {
+  const getHaystack = s => ([
+    s.settings["hostname"],
+    s.settings.hostname_parsed,
+    s.settings.address
+  ].join(" ").toLowerCase());
+
+  return servers.filter((s) => getHaystack(s).includes(query.toLowerCase()));
+}
