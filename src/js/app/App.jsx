@@ -46,7 +46,7 @@ const AppHeader = () => {
       <NavTabs />
       <Button
         startIcon={<GitHubIcon />}
-        href="https://github.com/vikpe/qw-server-overview"
+        href="https://github.com/qw-tools/servers"
       >
         <Box sx={{ display: { xs: "none", sm: "block" } }}>Source</Box>
       </Button>
