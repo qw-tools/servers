@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import _sortBy from "lodash.sortby";
 import _keyBy from "lodash.keyby";
+import _sortBy from "lodash.sortby";
 import { Chart } from "react-charts";
-import Grid from "@mui/material/Grid";
-import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectAllServers } from "../../services/hub.js";
-import { Flag, Debug } from "../../components/Common.jsx";
+import { Flag } from "../../common/UserInterface.jsx";
 
-const USAGE_URL =
+const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
+const SERVERS_USAGE_URL =
   "https://raw.githubusercontent.com/vikpe/qw-data/main/hubapi/server_usage.json";
+
 const CHART_OPTIONS = {
   dataType: "ordinal",
   initialWidth: Math.round(window.innerWidth * (9 / 12)),
@@ -43,67 +41,56 @@ function getDataPoints(dateRange, serverUsage) {
 }
 
 export const ServerStatsPage = () => {
-  const serverDetailsArr = useSelector(selectAllServers).filter((s) => {
-    return s.version.toLowerCase().includes("mvdsv");
-  });
   const [usage, setUsage] = useState({});
+  const [details, setDetails] = useState([]);
 
   useEffect(() => {
-    fetch(USAGE_URL)
+    fetch(SERVERS_USAGE_URL)
       .then((data) => data.json())
       .then((usage) => setUsage(usage));
   }, []);
 
+  useEffect(() => {
+    fetch(SERVERS_DETAILS_URL)
+      .then((data) => data.json())
+      .then((details) => details.filter((s) => s.version.toLowerCase().includes("mvdsv")))
+      .then((mvdsvDetails) => setDetails(_sortBy(mvdsvDetails, (s) => s.settings.hostname.toLowerCase())))
+  }, []);
+
   const usageByHp = Object.keys(usage);
 
-  if (0 === usageByHp.length || 0 === serverDetailsArr.length) {
-    return <Box p={2}>loading...</Box>;
+  if (0 === usageByHp.length || 0 === details.length) {
+    return <div className="p-4">loading...</div>;
   }
 
   const dateRange = getDateRange(Object.values(usage));
-  const serverDetailsByHp = _keyBy(
-    serverDetailsArr,
-    "settings.hostname_parsed"
-  );
+  const serverDetailsByHp = _keyBy(details, "settings.hostname_parsed");
 
   return (
-    <div>
-      <Box sx={{ px: 2, py: 1, backgroundColor: "#ffe" }}>
+    <div className="divide-y">
+      <div className="p-2 bg-sky-50">
         🛈{" "}
         <small>
           Each bar represents the number of players at 15 minute intervals.
         </small>
-      </Box>
+      </div>
 
       {Object.entries(serverDetailsByHp).map(([hp, details], index) => (
-        <Grid
+        <div
           key={index}
-          container
-          alignItems="center"
-          px={2}
-          py={0.5}
-          borderTop={"1px solid #ddd"}
-          className={"app-server-usage-grid"}
+          className={"px-2 py-1 hover:bg-yellow-50 md:flex md:items-center"}
         >
-          <Grid item xs={0} md={4} xl={3}>
-            <span style={{ fontSize: ".8rem" }}>
-              <Flag cc={details.geo.cc} /> {details.settings.hostname}
-            </span>
-          </Grid>
+          <div className="text-sm md:w-80">
+            <Flag cc={details.geo.cc} /> {details.settings.hostname}
+          </div>
           {usageByHp.includes(hp) && (
-            <Grid
-              item
-              xs={12}
-              md={8}
-              xl={9}
-              style={{ backgroundColor: "#f0f7fa" }}
-            >
+            <div className="bg-sky-50 mt-1 md:grow">
               <ServerChart
                 points={getDataPoints(dateRange, usage[hp].player_count)}
               />
-            </Grid>
+            </div>
           )}
-        </Grid>
+        </div>
       ))}
     </div>
   );
