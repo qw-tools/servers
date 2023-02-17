@@ -3,6 +3,7 @@ import React from "react";
 export const Flag = (props) => (
   <img
     src={`https://www.quakeworld.nu/images/flags/${props.cc.toLowerCase()}.gif`}
+    className={"inline"}
     width={16}
     height={11}
   />
