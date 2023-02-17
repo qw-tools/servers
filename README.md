@@ -23,8 +23,8 @@ qwmaster.fodquake.net:27000
 
 ```shell
 # clone repo
-git clone git@github.com:qw-tools/hud-numbers.git
-cd hud-numbers
+git clone git@github.com:qw-tools/servers.git
+cd servers
 
 # install dependencies
 yarn install
@@ -37,9 +37,9 @@ dev server is hosted at http://localhost:5173
 
 ### Commands
 
-| Command        | Description                                       |
-|----------------|---------------------------------------------------|
-| `yarn dev`     | Start development server at http://localhost:5173 |
-| `yarn build`   | Build site to `/dist`                             |
-| `yarn serve`   | Serve `/dist` at http://localhost:4173            |
-| `yarn foprmat` | Run formatter                                     |
+| Command         | Description                                       |
+|-----------------|---------------------------------------------------|
+| `yarn dev`      | Start development server at http://localhost:5173 |
+| `yarn build`    | Build site to `/dist`                             |
+| `yarn serve`    | Serve `/dist` at http://localhost:4173            |
+| `yarn format`   | Run formatter                                     |
