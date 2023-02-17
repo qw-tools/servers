@@ -1,5 +1,4 @@
-import React from "react";
-import { connect, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import _debounce from "lodash.debounce";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
@@ -9,17 +8,22 @@ import { Tooltip } from "react-leaflet/Tooltip";
 import copyToClipboard from "copy-text-to-clipboard";
 import IconButton from "@mui/material/IconButton";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { selectFilteredServers } from "../../services/hub.js";
-import { updateFilters } from "../../common/filtersSlice.js";
+import _sortBy from "lodash.sortby";
+
+const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
+const MIN_QUERY_LENGTH = 2;
 
 const QueryInput = (props) => {
-  const { query, updateFilters } = props;
+  const { onChange } = props;
 
   const handleChange = (e) => {
-    const minQueryLength = 3;
-    const queryValue = e.target.value;
-    const query = queryValue.length >= minQueryLength ? queryValue : "";
-    updateFilters({ query });
+    const query = e.target.value;
+
+    if (query.length >= MIN_QUERY_LENGTH) {
+      onChange(query);
+    } else {
+      onChange("");
+    }
   };
 
   const _handleChange = _debounce(handleChange, 250);
@@ -29,34 +33,60 @@ const QueryInput = (props) => {
       className="border p-2 w-full"
       type="search"
       placeholder="Search"
-      defaultValue={query}
       onChange={_handleChange}
     />
   );
 };
 
-const QueryInputComponent = connect((state) => state.filters, {
-  updateFilters,
-})(QueryInput);
+function filterServers(servers, query) {
+  if (query.length <= MIN_QUERY_LENGTH) {
+    return servers;
+  }
 
-export const ServerMapPage = () => (
-  <div className="flex h-[100%] -z-10">
-    <div className="grow">
-      <ServerMap />
-    </div>
-    <div className="w-80 border-l-2">
-      <div className="p-2 border-b shadow">
-        <QueryInputComponent />
-      </div>
-      <div className="overflow-auto max-h-[80vh] divide-y">
-        <ServerList />
-      </div>
-    </div>
-  </div>
-);
+  return servers.filter((s) => {
+    const haystack = [s.settings.hostname, s.settings.address]
+      .join(" ")
+      .toLowerCase();
 
-const ServerList = () => {
-  const servers = useSelector(selectFilteredServers);
+    return haystack.includes(query.toLowerCase());
+  });
+}
+
+export const ServerMapPage = () => {
+  const [servers, setServers] = useState([]);
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    fetch(SERVERS_DETAILS_URL)
+      .then((data) => data.json())
+      .then((servers) =>
+        setServers(_sortBy(servers, (s) => s.settings.hostname.toLowerCase()))
+      );
+  }, []);
+
+  const onQueryChange = (query) => setQuery(query);
+
+  const filteredServers = filterServers(servers, query);
+
+  return (
+    <div className="flex h-[100%]">
+      <div className="grow">
+        <ServerMap servers={filteredServers} />
+      </div>
+      <div className="w-80 border-l-2">
+        <div className="p-2 border-b shadow">
+          <QueryInput onChange={onQueryChange} />
+        </div>
+        <div className="overflow-auto max-h-[80vh] divide-y">
+          <ServerList servers={filteredServers} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ServerList = (props) => {
+  const { servers } = props;
 
   return (
     <div className="divide-y">
@@ -74,9 +104,11 @@ const ServerList = () => {
 const ServerListItem = (props) => {
   const { hostname, hostname_parsed } = props;
   return (
-    <div className="px-3 py-2 text-sm">
+    <div className="px-3 py-2 text-sm hover:bg-yellow-50">
       <div>{hostname}</div>
-      <span className="font-mono">{hostname_parsed}</span>{" "}
+      <span className="font-mono text-gray-600 text-xs">
+        {hostname_parsed}
+      </span>{" "}
       <CopyIpButton ip={hostname_parsed} />
     </div>
   );
@@ -86,13 +118,14 @@ const CopyIpButton = (props) => (
   <IconButton
     onClick={() => copyToClipboard(props.ip)}
     title="Copy IP to clipboard"
+    size="small"
   >
-    <ContentCopyIcon fontSize="small" />
+    <ContentCopyIcon fontSize="xs" />
   </IconButton>
 );
 
-export const ServerMap = () => {
-  const servers = useSelector(selectFilteredServers);
+export const ServerMap = (props) => {
+  const { servers } = props;
   const markerGroups = createMarkerGroups(servers);
 
   return (
