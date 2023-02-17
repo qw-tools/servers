@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app-map-container {
+  width: 600px;
+  height: 600px;
+}
+
+.leaflet-popup-content {
+  width: 460px !important;
+  max-height: 600px;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.leaflet-popup-close-button {
+  margin-top: .8rem;
+  margin-right: .8rem;
+}
+

@@ -1,22 +1,16 @@
 import React from "react";
+import { connect, useSelector } from "react-redux";
+import _debounce from "lodash.debounce";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { Marker } from "react-leaflet/Marker";
 import { Popup } from "react-leaflet/Popup";
 import { Tooltip } from "react-leaflet/Tooltip";
-import { selectFilteredServers } from "../../services/hub.js";
-import { connect, useSelector } from "react-redux";
-import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
-import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import { updateFilters } from "../../app/filtersSlice.js";
 import copyToClipboard from "copy-text-to-clipboard";
+import IconButton from "@mui/material/IconButton";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import _debounce from "lodash.debounce";
+import { selectFilteredServers } from "../../services/hub.js";
+import { updateFilters } from "../../common/filtersSlice.js";
 
 const QueryInput = (props) => {
   const { query, updateFilters } = props;
@@ -31,10 +25,10 @@ const QueryInput = (props) => {
   const _handleChange = _debounce(handleChange, 250);
 
   return (
-    <TextField
-      fullWidth
+    <input
+      className="border p-2 w-full"
       type="search"
-      label="Search"
+      placeholder="Search"
       defaultValue={query}
       onChange={_handleChange}
     />
@@ -46,30 +40,26 @@ const QueryInputComponent = connect((state) => state.filters, {
 })(QueryInput);
 
 export const ServerMapPage = () => (
-  <Grid container>
-    <Grid item xs={10}>
+  <div className="flex h-[100%] -z-10">
+    <div className="grow">
       <ServerMap />
-    </Grid>
-    <Grid
-      item
-      xs={2}
-      style={{ boxShadow: "-4px 3px 4px rgb(0,0,0,13%)", zIndex: 5555 }}
-    >
-      <List dense style={{ paddingBottom: 0 }}>
-        <ListItem>
-          <QueryInputComponent />
-        </ListItem>
-      </List>
-      <ServerList />
-    </Grid>
-  </Grid>
+    </div>
+    <div className="w-80 border-l-2">
+      <div className="p-2 border-b shadow">
+        <QueryInputComponent />
+      </div>
+      <div className="overflow-auto max-h-[80vh] divide-y">
+        <ServerList />
+      </div>
+    </div>
+  </div>
 );
 
 const ServerList = () => {
   const servers = useSelector(selectFilteredServers);
 
   return (
-    <List className="app-server-list" dense>
+    <div className="divide-y">
       {servers.map((server) => (
         <ServerListItem
           key={server.address}
@@ -77,27 +67,17 @@ const ServerList = () => {
           hostname_parsed={server.settings["hostname_parsed"]}
         />
       ))}
-    </List>
+    </div>
   );
 };
 
 const ServerListItem = (props) => {
   const { hostname, hostname_parsed } = props;
   return (
-    <React.Fragment>
-      <Divider component="li" />
-      <ListItem>
-        <ListItemText
-          primary={hostname}
-          secondary={
-            <React.Fragment>
-              {hostname_parsed}
-              <CopyIpButton ip={hostname_parsed} />
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-    </React.Fragment>
+    <div className="px-3 py-2 text-sm">
+      <div>{hostname}</div>
+      <span className="font-mono">{hostname_parsed}</span> <CopyIpButton ip={hostname_parsed} />
+    </div>
   );
 };
 
@@ -116,7 +96,7 @@ export const ServerMap = () => {
 
   return (
     <MapContainer
-      className="app-map-container"
+      className={"h-[100%] w-[100%]"}
       center={[30, 0]}
       zoom={3}
       minZoom={3}
@@ -178,8 +158,8 @@ const createMarkerGroups = (servers) => {
     markerGroups[key]["coordinates"].push(coordinates);
     markerGroups[key]["info"].push(
       servers[i]["settings"]["hostname"].replaceAll("&#46;", ".") +
-        " - " +
-        servers[i]["settings"]["hostname_parsed"]
+      " - " +
+      servers[i]["settings"]["hostname_parsed"]
     );
   }
 
