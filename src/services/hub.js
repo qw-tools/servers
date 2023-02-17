@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
-import { selectFilters } from "../app/filtersSlice.js";
+import { selectFilters } from "../common/filtersSlice.js";
 
 const serversAdapter = createEntityAdapter({
   selectId: (server) => server.address,
