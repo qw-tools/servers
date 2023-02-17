@@ -20,6 +20,7 @@ const columnDefs = [
       <span title={params.value}>
         <img
           src={`https://www.quakeworld.nu/images/flags/${params.data.cc.toLowerCase()}.gif`}
+          className={"inline"}
           width={16}
           height={11}
           alt=""

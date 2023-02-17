@@ -1,20 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import store from "./app/store.js";
+import store from "../../common/store.js";
 import { Provider } from "react-redux";
-import App from "./app/App.jsx";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import App from "./App.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  //<React.StrictMode>
   <Provider store={store}>
-    <ThemeProvider theme={createTheme()}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <App />
   </Provider>
-  //</React.StrictMode>
 );
 
 if (import.meta.env.PROD) {

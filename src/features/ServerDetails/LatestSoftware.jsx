@@ -54,9 +54,7 @@ export const LatestSoftware = React.memo(() => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        style={{ padding: "1rem", backgroundColor: "#eee", fontSize: ".85em" }}
-      >
+      <div className="p-2 bg-gray-100 text-sm">
         Latest versions:{" "}
         {projects.map((p) => (
           <ProjectVersion key={p} name={p} />
