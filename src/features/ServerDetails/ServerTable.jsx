@@ -1,8 +1,9 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectAllServers } from "../../services/hub.js";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import _pick from "lodash.pick";
+import _sortBy from "lodash.sortby";
+
+const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
 
 const defaultOptions = {
   filter: true,
@@ -46,14 +47,23 @@ const gridOptions = {
 };
 
 export const ServerTable = () => {
-  const servers = useSelector(selectAllServers);
-  const flatData = toFlatData(servers);
+  const [details, setDetails] = useState([]);
+
+  useEffect(() => {
+    fetch(SERVERS_DETAILS_URL)
+      .then((data) => data.json())
+      .then((details) =>
+        setDetails(_sortBy(details, (s) => s.settings.hostname.toLowerCase()))
+      );
+  }, []);
+
+  const flatDetails = toFlatData(details);
 
   return (
     <div className="ag-theme-alpine" style={{ height: "100%", width: "100%" }}>
       <AgGridReact
         gridOptions={gridOptions}
-        rowData={flatData}
+        rowData={flatDetails}
         columnDefs={columnDefs}
         onGridReady={applyQueryParams}
       ></AgGridReact>
