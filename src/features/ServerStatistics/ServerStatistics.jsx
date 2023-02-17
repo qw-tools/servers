@@ -53,8 +53,14 @@ export const ServerStatsPage = () => {
   useEffect(() => {
     fetch(SERVERS_DETAILS_URL)
       .then((data) => data.json())
-      .then((details) => details.filter((s) => s.version.toLowerCase().includes("mvdsv")))
-      .then((mvdsvDetails) => setDetails(_sortBy(mvdsvDetails, (s) => s.settings.hostname.toLowerCase())))
+      .then((details) =>
+        details.filter((s) => s.version.toLowerCase().includes("mvdsv"))
+      )
+      .then((mvdsvDetails) =>
+        setDetails(
+          _sortBy(mvdsvDetails, (s) => s.settings.hostname.toLowerCase())
+        )
+      );
   }, []);
 
   const usageByHp = Object.keys(usage);

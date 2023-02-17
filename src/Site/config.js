@@ -1,4 +1,6 @@
-const baseUrl = import.meta.env.DEV ? "http://localhost:5173/" : import.meta.env.BASE_URL;
+const baseUrl = import.meta.env.DEV
+  ? "http://localhost:5173/"
+  : import.meta.env.BASE_URL;
 
 export const pages = [
   {

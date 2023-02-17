@@ -76,7 +76,8 @@ const ServerListItem = (props) => {
   return (
     <div className="px-3 py-2 text-sm">
       <div>{hostname}</div>
-      <span className="font-mono">{hostname_parsed}</span> <CopyIpButton ip={hostname_parsed} />
+      <span className="font-mono">{hostname_parsed}</span>{" "}
+      <CopyIpButton ip={hostname_parsed} />
     </div>
   );
 };
@@ -158,8 +159,8 @@ const createMarkerGroups = (servers) => {
     markerGroups[key]["coordinates"].push(coordinates);
     markerGroups[key]["info"].push(
       servers[i]["settings"]["hostname"].replaceAll("&#46;", ".") +
-      " - " +
-      servers[i]["settings"]["hostname_parsed"]
+        " - " +
+        servers[i]["settings"]["hostname_parsed"]
     );
   }
 

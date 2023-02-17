@@ -17,15 +17,14 @@ export function SiteHeader(props) {
             <a
               key={page.url}
               href={page.url}
-              className={
-                classNames(
-                  "flex px-2 h-full items-center hover:text-yellow-100",
-                  {
-                    "font-bold text-green-300": props.selectedPageIndex === pageIndex,
-                    "text-sky-200": props.selectedPageIndex !== pageIndex
-                  }
-                )
-              }
+              className={classNames(
+                "flex px-2 h-full items-center hover:text-yellow-100",
+                {
+                  "font-bold text-green-300":
+                    props.selectedPageIndex === pageIndex,
+                  "text-sky-200": props.selectedPageIndex !== pageIndex,
+                }
+              )}
             >
               {page.title}
             </a>

@@ -53,11 +53,10 @@ export const selectFilteredServers = createSelector(
 );
 
 const filterServers = (servers, query) => {
-  const getHaystack = s => ([
-    s.settings["hostname"],
-    s.settings.hostname_parsed,
-    s.settings.address
-  ].join(" ").toLowerCase());
+  const getHaystack = (s) =>
+    [s.settings["hostname"], s.settings.hostname_parsed, s.settings.address]
+      .join(" ")
+      .toLowerCase();
 
   return servers.filter((s) => getHaystack(s).includes(query.toLowerCase()));
-}
+};
