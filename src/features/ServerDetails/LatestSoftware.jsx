@@ -1,51 +1,32 @@
-import React from "react";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import { format } from "timeago.js";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-
-const fetchGet = async (url) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Network response was not ok: ${url}`);
-  }
-  return response.json();
-};
 
 export const ProjectVersion = React.memo((props) => {
   const { name } = props;
 
-  const query = useQuery([name], () =>
-    fetchGet(
-      `https://raw.githubusercontent.com/vikpe/qw-data/main/github/${name}_latest_release.json`
-    )
-  );
+  const [release, setRelease] = useState({});
 
-  if (!query.data) {
+  useEffect(() => {
+    const latestReleaseUrl = `https://raw.githubusercontent.com/vikpe/qw-data/main/github/${name}_latest_release.json`;
+
+    fetch(latestReleaseUrl)
+      .then((data) => data.json())
+      .then((release) => setRelease(release));
+  }, []);
+
+  if (release === {}) {
     return null;
   }
 
-  const timeSince = format(Date.parse(query.data.published_at));
+  const timeSince = format(Date.parse(release.published_at));
 
   return (
-    <>
-      <a href={query.data.html_url} style={{ marginLeft: 10 }}>
-        <strong>
-          {name} {query.data.tag_name}
-        </strong>{" "}
-        ({timeSince})
-      </a>
-    </>
+    <a href={release.html_url} style={{ marginLeft: 10 }}>
+      <strong>
+        {name} {release.tag_name}
+      </strong>{" "}
+      ({timeSince})
+    </a>
   );
 });
 
@@ -53,13 +34,11 @@ export const LatestSoftware = React.memo(() => {
   const projects = ["mvdsv", "ktx", "qtv", "qwfwd"];
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="p-2 bg-gray-100 text-sm">
-        Latest versions:{" "}
-        {projects.map((p) => (
-          <ProjectVersion key={p} name={p} />
-        ))}
-      </div>
-    </QueryClientProvider>
+    <div className="p-2 bg-gray-100 text-sm">
+      Latest versions:{" "}
+      {projects.map((p) => (
+        <ProjectVersion key={p} name={p} />
+      ))}
+    </div>
   );
 });
