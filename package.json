@@ -23,7 +23,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.9",
-    "@mui/material": "^5.11.9",
+    "@mui/material": "^5.11.10",
     "@vitejs/plugin-react": "^3.1.0",
     "ag-grid-community": "^29.1.0",
     "ag-grid-react": "^29.1.0",
@@ -39,8 +39,8 @@
     "react-charts": "^3.0.0-beta.54",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.0",
-    "sass": "^1.58.2",
+    "sass": "^1.58.3",
     "timeago.js": "^4.0.2",
-    "vite": "^4.1.2"
+    "vite": "^4.1.4"
   }
 }
