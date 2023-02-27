@@ -54,7 +54,7 @@ export const ServerTable = () => {
       .then((data) => data.json())
       .then((details) => {
         setDetails(
-          _sortBy(details, (s) => (s.settings.hostname?.toLowerCase() || ""))
+          _sortBy(details, (s) => s.settings.hostname?.toLowerCase() || "")
         );
       });
   }, []);

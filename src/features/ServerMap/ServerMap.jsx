@@ -60,7 +60,9 @@ export const ServerMapPage = () => {
     fetch(SERVERS_DETAILS_URL)
       .then((data) => data.json())
       .then((servers) =>
-        setServers(_sortBy(servers, (s) => s.settings.hostname.toLowerCase()))
+        setServers(
+          _sortBy(servers, (s) => s.settings.hostname?.toLowerCase() || "")
+        )
       );
   }, []);
 
