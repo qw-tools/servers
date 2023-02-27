@@ -1,12 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import _keyBy from "lodash.keyby";
-import _sortBy from "lodash.sortby";
 import { Chart } from "react-charts";
 import { Flag } from "../../common/UserInterface.jsx";
-
-const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
-const SERVERS_USAGE_URL =
-  "https://raw.githubusercontent.com/vikpe/qw-data/main/hubapi/server_usage.json";
+import { getServerDetails, getServerUsage } from "../../common/util.js";
 
 const CHART_OPTIONS = {
   dataType: "ordinal",
@@ -45,22 +41,22 @@ export const ServerStatsPage = () => {
   const [details, setDetails] = useState([]);
 
   useEffect(() => {
-    fetch(SERVERS_USAGE_URL)
-      .then((data) => data.json())
-      .then((usage) => setUsage(usage));
+    async function run() {
+      setUsage(await getServerUsage());
+    }
+
+    run().catch(console.error);
   }, []);
 
   useEffect(() => {
-    fetch(SERVERS_DETAILS_URL)
-      .then((data) => data.json())
-      .then((details) =>
-        details.filter((s) => s.version.toLowerCase().includes("mvdsv"))
-      )
-      .then((mvdsvDetails) =>
-        setDetails(
-          _sortBy(mvdsvDetails, (s) => s.settings.hostname.toLowerCase())
-        )
+    async function run() {
+      const servers = (await getServerDetails()).filter((s) =>
+        s.version.toLowerCase().includes("mvdsv")
       );
+      setDetails(servers);
+    }
+
+    run().catch(console.error);
   }, []);
 
   const usageByHp = Object.keys(usage);

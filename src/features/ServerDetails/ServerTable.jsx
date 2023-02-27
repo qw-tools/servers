@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import _pick from "lodash.pick";
-import _sortBy from "lodash.sortby";
-
-const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
+import { getServerDetails } from "../../common/util.js";
 
 const defaultOptions = {
   filter: true,
@@ -50,13 +48,11 @@ export const ServerTable = () => {
   const [details, setDetails] = useState([]);
 
   useEffect(() => {
-    fetch(SERVERS_DETAILS_URL)
-      .then((data) => data.json())
-      .then((details) => {
-        setDetails(
-          _sortBy(details, (s) => s.settings.hostname?.toLowerCase() || "")
-        );
-      });
+    async function run() {
+      setDetails(await getServerDetails());
+    }
+
+    run().catch(console.error);
   }, []);
 
   const flatDetails = toFlatData(details);

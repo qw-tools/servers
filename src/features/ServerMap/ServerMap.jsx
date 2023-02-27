@@ -8,9 +8,8 @@ import { Tooltip } from "react-leaflet/Tooltip";
 import copyToClipboard from "copy-text-to-clipboard";
 import IconButton from "@mui/material/IconButton";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import _sortBy from "lodash.sortby";
+import { getServerDetails } from "../../common/util.js";
 
-const SERVERS_DETAILS_URL = "https://hubapi.quakeworld.nu/v2/servers";
 const MIN_QUERY_LENGTH = 2;
 
 const QueryInput = (props) => {
@@ -57,13 +56,11 @@ export const ServerMapPage = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    fetch(SERVERS_DETAILS_URL)
-      .then((data) => data.json())
-      .then((servers) =>
-        setServers(
-          _sortBy(servers, (s) => s.settings.hostname?.toLowerCase() || "")
-        )
-      );
+    async function run() {
+      setServers(await getServerDetails());
+    }
+
+    run().catch(console.error);
   }, []);
 
   const onQueryChange = (query) => setQuery(query);
