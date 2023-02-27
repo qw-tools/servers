@@ -52,9 +52,11 @@ export const ServerTable = () => {
   useEffect(() => {
     fetch(SERVERS_DETAILS_URL)
       .then((data) => data.json())
-      .then((details) =>
-        setDetails(_sortBy(details, (s) => s.settings.hostname.toLowerCase()))
-      );
+      .then((details) => {
+        setDetails(
+          _sortBy(details, (s) => (s.settings.hostname?.toLowerCase() || ""))
+        );
+      });
   }, []);
 
   const flatDetails = toFlatData(details);
