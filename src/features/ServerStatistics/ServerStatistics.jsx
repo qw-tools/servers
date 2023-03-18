@@ -89,7 +89,7 @@ export const ServerStatsPage = () => {
       <div className="p-2 bg-sky-50">
         🛈{" "}
         <small>
-          Each bar represents the maximum number of players per day.
+          Each bar represents the maximum number concurrent players per day.
         </small>
       </div>
 
