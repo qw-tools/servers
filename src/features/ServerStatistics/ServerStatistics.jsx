@@ -19,18 +19,34 @@ function getDateRange(data) {
   return range;
 }
 
+function unixToIsoDay(unix) {
+  return new Date(parseInt(unix) * 1000).toISOString().substring(0, 10); // YYYY-MM-DD
+}
+
 function getDataPoints(dateRange, serverUsage) {
-  const dataPoints = [];
+  // convert players per 15 min to maximum players per day
+  const maxPlayersPerDay = {};
 
   for (let i = 0; i < dateRange.length; i++) {
-    const x = new Date(parseInt(dateRange[i]) * 1000).toISOString();
-    let y = 0;
+    const day = unixToIsoDay(dateRange[i]);
 
-    if (serverUsage.hasOwnProperty(dateRange[i])) {
-      y = serverUsage[dateRange[i]];
+    if (!maxPlayersPerDay.hasOwnProperty(day)) {
+      maxPlayersPerDay[day] = 0;
     }
 
-    dataPoints.push({ x, y });
+    if (serverUsage.hasOwnProperty(dateRange[i])) {
+      maxPlayersPerDay[day] = Math.max(
+        maxPlayersPerDay[day],
+        serverUsage[dateRange[i]]
+      );
+    }
+  }
+
+  // format for chart
+  const dataPoints = [];
+
+  for (const [key, value] of Object.entries(maxPlayersPerDay)) {
+    dataPoints.push({ x: key, y: value });
   }
 
   return dataPoints;
@@ -73,7 +89,7 @@ export const ServerStatsPage = () => {
       <div className="p-2 bg-sky-50">
         🛈{" "}
         <small>
-          Each bar represents the number of players at 15 minute intervals.
+          Each bar represents the maximum number of players per day.
         </small>
       </div>
 
