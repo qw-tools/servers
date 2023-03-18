@@ -102,7 +102,7 @@ export const ServerStatsPage = () => {
             <Flag cc={details.geo.cc} /> {details.settings.hostname}
           </div>
           {usageByHp.includes(hp) && (
-            <div className="bg-sky-50 mt-1 md:grow">
+            <div className="bg-sky-50 mt-1 md:grow max-w-[600px]">
               <ServerChart
                 points={getDataPoints(dateRange, usage[hp].player_count)}
               />
