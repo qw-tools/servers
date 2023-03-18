@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import _keyBy from "lodash.keyby";
 import { Chart } from "react-charts";
 import { Flag } from "../../common/UserInterface.jsx";
@@ -24,29 +24,34 @@ function unixToIsoDay(unix) {
 }
 
 function getDataPoints(dateRange, serverUsage) {
-  // convert players per 15 min to maximum players per day
-  const maxPlayersPerDay = {};
+  // convert player count per 15 min
+  // to percentage of per day with at least 2 players
+  const scorePerDay = {};
 
   for (let i = 0; i < dateRange.length; i++) {
     const day = unixToIsoDay(dateRange[i]);
 
-    if (!maxPlayersPerDay.hasOwnProperty(day)) {
-      maxPlayersPerDay[day] = 0;
+    if (!scorePerDay.hasOwnProperty(day)) {
+      scorePerDay[day] = 0;
     }
 
     if (serverUsage.hasOwnProperty(dateRange[i])) {
-      maxPlayersPerDay[day] = Math.max(
-        maxPlayersPerDay[day],
-        serverUsage[dateRange[i]]
-      );
+      const playerCount = serverUsage[dateRange[i]];
+
+      if (playerCount >= 2) {
+        scorePerDay[day] += 1;
+      }
     }
   }
 
   // format for chart
   const dataPoints = [];
+  const maxScore = 24 * 4;
 
-  for (const [key, value] of Object.entries(maxPlayersPerDay)) {
-    dataPoints.push({ x: key, y: value });
+  for (const [key, score] of Object.entries(scorePerDay)) {
+    const percentage = Math.round(100 * (score / maxScore));
+
+    dataPoints.push({ x: key, y: percentage });
   }
 
   return dataPoints;
@@ -89,7 +94,8 @@ export const ServerStatsPage = () => {
       <div className="p-2 bg-sky-50">
         🛈{" "}
         <small>
-          Each bar represents the maximum number concurrent players per day.
+          Each bar represents the percentage of time the server has at least 2
+          players, per day.
         </small>
       </div>
 
@@ -140,12 +146,22 @@ const ServerChart = (props) => {
       {
         getValue: (d) => d.y,
         min: 0,
-        max: 8, // todo: perhaps remove
+        max: 100,
         show: false,
       },
     ],
     []
   );
+
+  if (0 === points.length) {
+    return <Fragment />;
+  }
+
+  const hasValues = points.map((p) => p.y).some((v) => v > 0);
+
+  if (!hasValues) {
+    return <Fragment />;
+  }
 
   const options = {
     ...CHART_OPTIONS,
