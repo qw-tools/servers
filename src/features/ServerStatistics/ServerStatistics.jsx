@@ -94,8 +94,7 @@ export const ServerStatsPage = () => {
       <div className="p-2 bg-sky-50">
         🛈{" "}
         <small>
-          Each bar represents the percentage of time the server has at least 2
-          players, per day.
+          Each bar represents the percentage per day with at least 2 players.
         </small>
       </div>
 
