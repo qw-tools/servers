@@ -127,6 +127,11 @@ export const ServerMap = (props) => {
   const { servers } = props;
   const markerGroups = createMarkerGroups(servers);
 
+  function handleReady(event) {
+    const map = event.target;
+    map.setMaxBounds(map.getBounds());
+  }
+
   return (
     <MapContainer
       className={"h-[100%] w-[100%]"}
@@ -134,10 +139,12 @@ export const ServerMap = (props) => {
       zoom={3}
       minZoom={3}
       maxZoom={7}
+      whenReady={handleReady}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        noWrap
       />
       {markerGroups.map((group, index) => (
         <MarkerMemo
@@ -192,7 +199,7 @@ const createMarkerGroups = (servers) => {
     markerGroups[key]["info"].push(
       servers[i]["settings"]["hostname"].replaceAll("&#46;", ".") +
         " - " +
-        servers[i]["settings"]["hostname_parsed"]
+        servers[i]["settings"]["hostname_parsed"],
     );
   }
 
@@ -200,7 +207,7 @@ const createMarkerGroups = (servers) => {
 
   for (let i = 0; i < markerGroups.length; i++) {
     markerGroups[i]["approxCoordinates"] = calcAverageCoordinates(
-      markerGroups[i]["coordinates"]
+      markerGroups[i]["coordinates"],
     );
     delete markerGroups[i]["coordinates"];
   }
