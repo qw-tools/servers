@@ -8,7 +8,6 @@ export default defineConfig({
       input: {
         details: "index.html",
         map: "map.html",
-        statistics: "statistics.html",
       },
     },
   },
