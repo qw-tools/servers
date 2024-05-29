@@ -11,8 +11,4 @@ export const pages = [
     title: "World Map",
     url: `${baseUrl}map.html`,
   },
-  {
-    title: "Statistics",
-    url: `${baseUrl}statistics.html`,
-  },
 ];

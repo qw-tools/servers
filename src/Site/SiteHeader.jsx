@@ -23,7 +23,7 @@ export function SiteHeader(props) {
                   "font-bold text-green-300":
                     props.selectedPageIndex === pageIndex,
                   "text-sky-200": props.selectedPageIndex !== pageIndex,
-                }
+                },
               )}
             >
               {page.title}
