@@ -93,7 +93,9 @@ const ServerList = (props) => {
         <ServerListItem
           key={server.address}
           hostname={server.settings["hostname"]}
-          hostname_parsed={server.settings["hostname_parsed"]}
+          hostname_parsed={
+            server.settings["hostport"] || server.settings["hostname_parsed"]
+          }
         />
       ))}
     </div>
@@ -160,7 +162,7 @@ export const ServerMap = (props) => {
 const MarkerMemo = React.memo((props) => (
   <Marker position={props.coordinates}>
     <Popup>
-      <ul>
+      <ul style={{ margin: 10 }}>
         {props.info.map((info, index) => (
           <li key={index}>
             {info} <CopyIpButton ip={info.split(" - ")[1]} />
@@ -182,7 +184,16 @@ const createMarkerGroups = (servers) => {
   let markerGroups = {};
 
   for (let i = 0; i < servers.length; i++) {
-    let coordinates = servers[i]["geo"]["coordinates"];
+    let coordinates;
+
+    if (servers[i]["settings"]["coords"]) {
+      coordinates = servers[i]["settings"]["coords"]
+        .split(",")
+        .map((p) => Number.parseFloat(p.trim()));
+    } else {
+      coordinates = servers[i]["geo"]["coordinates"];
+    }
+
     let approxCoordinates = coordinates.map((c) => roundToStep(c, 0.5));
     let key = approxCoordinates.join(" ");
 
@@ -194,12 +205,14 @@ const createMarkerGroups = (servers) => {
       };
     }
 
+    const settings = servers[i]["settings"];
+
     markerGroups[key]["key"] = key;
     markerGroups[key]["coordinates"].push(coordinates);
     markerGroups[key]["info"].push(
-      servers[i]["settings"]["hostname"].replaceAll("&#46;", ".") +
+      settings["hostname"].replaceAll("&#46;", ".") +
         " - " +
-        servers[i]["settings"]["hostname_parsed"],
+        (settings["hostport"] || settings["hostname_parsed"]),
     );
   }
 
