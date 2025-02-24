@@ -76,7 +76,7 @@ const toFlatData = (servers) => {
     const { address, version, settings, geo } = servers[i];
     result.push({
       hostname: settings["hostname"],
-      address,
+      address: settings["hostport"] || address,
       admin: settings["*admin"],
       version,
       gamedir: settings["*gamedir"],
