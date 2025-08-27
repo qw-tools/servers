@@ -13,13 +13,15 @@ export function getServerDetails() {
           settings.hostname = "";
         }
 
-        if (settings.city) {
-          details[i].geo.city = settings.city;
-        }
+        try {
+          if (settings.city) {
+            details[i].geo.city = settings.city;
+          }
 
-        if (settings.coords) {
-          details[i].geo.coords = settings.coords.trim().split(",").map(p => Number.parseFloat(p));
-        }
+          if (settings.coords) {
+            details[i].geo.coords = settings.coords.trim().split(",").map(p => Number.parseFloat(p));
+          }
+        } catch (e) {}
       }
 
       return _sortBy(details, (s) => s.settings.hostname.toLowerCase());
