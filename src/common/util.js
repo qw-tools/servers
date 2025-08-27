@@ -7,8 +7,18 @@ export function getServerDetails() {
     .then((data) => data.json())
     .then((details) => {
       for (let i = 0; i < details.length; i++) {
-        if (!details[i].settings.hasOwnProperty("hostname")) {
-          details[i].settings.hostname = "";
+        const settings = details[i].settings;
+
+        if (!settings.hasOwnProperty("hostname")) {
+          settings.hostname = "";
+        }
+
+        if (settings.city) {
+          details[i].geo.city = settings.city;
+        }
+
+        if (settings.coords) {
+          details[i].geo.coords = settings.coords.trim().split(",").map(p => Number.parseFloat(p));
         }
       }
 
