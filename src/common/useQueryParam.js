@@ -8,8 +8,9 @@ const parse = (raw, defaultValue) =>
 
 const serialize = (value) => (Array.isArray(value) ? value.join(",") : value);
 
+// any value is allowed when no allowed values are given (e.g. free text)
 const isAllowed = (value, allowedValues) =>
-  [value].flat().every((v) => allowedValues.includes(v));
+  !allowedValues || [value].flat().every((v) => allowedValues.includes(v));
 
 const readStorage = (name) => {
   try {

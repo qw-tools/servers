@@ -18,7 +18,7 @@ Settings can be linked using query params, e.g. `?view=map&types=qtv`.
 | `view`     | `table` (default), `map` or `cards`                             | yes        |
 | `group`    | Host cards grouping: `none` (default), `region` or `admin`      | yes        |
 | `types`    | Only show these server types: `qtv`, `proxy`, e.g. `qtv,proxy`  | yes        |
-| `filter`   | Free text filter, e.g. `?filter=sweden`                         | no         |
+| `filter`   | Free text filter, e.g. `?filter=sweden`                         | yes        |
 | `<column>` | Table column filter, e.g. `?view=table&country=sweden`          | no         |
 
 Remembered settings are stored in the browser (local storage), a query param in a link takes precedence.

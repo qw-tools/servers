@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useMemo } from "react";
 import { filterByServerTypes, fuseOptions, groupByHost } from "./hosts.js";
 import { useQueryParam } from "./useQueryParam.js";
 
@@ -12,9 +12,7 @@ const serverTypeToggles = [
 
 // free text (?filter=) and server type filters for hosts
 export const useHostFilters = (servers) => {
-  const [query, setQuery] = useState(
-    () => new URLSearchParams(window.location.search).get("filter") ?? "",
-  );
+  const [query, setQuery] = useQueryParam("filter", "");
   const [serverTypes, setServerTypes] = useQueryParam(
     "types",
     NO_SERVER_TYPES,
