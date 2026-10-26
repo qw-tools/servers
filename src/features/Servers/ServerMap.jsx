@@ -12,6 +12,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HostCard } from "../../common/HostCard.jsx";
 import { groupHosts } from "../../common/hosts.js";
 import { Flag } from "../../common/UserInterface.jsx";
+import { useQueryParam } from "../../common/useQueryParam.js";
 import {
   clusterHighlightLayers,
   clusterLayers,
@@ -27,25 +28,55 @@ const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 export const ServerMap = (props) => {
   const drawerId = useId();
   const mapRef = useRef(null);
-  const [popup, setPopup] = useState(null); // { lngLat, hosts }
   const [hoveredIp, setHoveredIp] = useState(null);
 
-  const selectHost = useCallback((host) => {
-    const lngLat = toLngLat(host.geo.coordinates);
-    const map = mapRef.current;
+  // the hosts shown in the popup, by ip (?open=ip1,ip2), linkable and remembered
+  const [openIps, setOpenIps] = useQueryParam("open", NO_IPS);
+  const openHosts = useCallback(
+    (hosts) => setOpenIps(hosts.map((host) => host.ip)),
+    [setOpenIps],
+  );
 
-    if (!lngLat || !map) {
-      return;
+  // { hosts, lngLat, isCluster }, null when closed
+  const popup = useMemo(() => {
+    const hosts = props.hosts.filter((host) => openIps.includes(host.ip));
+    const coordinates = hosts
+      .map((host) => toLngLat(host.geo.coordinates))
+      .filter(Boolean);
+
+    if (coordinates.length === 0) {
+      return null;
     }
 
-    map.easeTo({ center: lngLat, zoom: Math.max(map.getZoom(), 5) });
-    setPopup({ lngLat, hosts: [host] });
-  }, []);
+    return {
+      hosts,
+      lngLat: [0, 1].map(
+        (i) =>
+          coordinates.reduce((sum, c) => sum + c[i], 0) / coordinates.length,
+      ),
+      isCluster: hosts.length > 1,
+    };
+  }, [openIps, props.hosts]);
+
+  const selectHost = useCallback(
+    (host) => {
+      const lngLat = toLngLat(host.geo.coordinates);
+      const map = mapRef.current;
+
+      if (!lngLat || !map) {
+        return;
+      }
+
+      map.easeTo({ center: lngLat, zoom: Math.max(map.getZoom(), 5) });
+      openHosts([host]);
+    },
+    [openHosts],
+  );
 
   const highlightedHosts = useMemo(
     () =>
       [
-        // a clicked cluster is highlighted as a whole, not per host
+        // several hosts (e.g. a clicked cluster) are highlighted as a whole, not per host
         ...(popup && !popup.isCluster ? popup.hosts : []),
         props.hosts.find((host) => host.ip === hoveredIp),
       ].filter(Boolean),
@@ -62,7 +93,7 @@ export const ServerMap = (props) => {
             hosts={props.hosts}
             highlightedHosts={highlightedHosts}
             popup={popup}
-            onPopup={setPopup}
+            onPopup={openHosts}
           />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-500">
@@ -219,6 +250,8 @@ const ProjectionControls = (props) => (
   </div>
 );
 
+const NO_IPS = [];
+
 // our coordinates are [lat, lng], mapbox uses [lng, lat]
 const toLngLat = (coordinates) =>
   coordinates && !coordinates.some(Number.isNaN)
@@ -247,6 +280,7 @@ const WorldMap = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [popupNode] = useState(() => document.createElement("div"));
   const popupRef = useRef(null);
+  const isUnmounting = useRef(false);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -295,17 +329,12 @@ const WorldMap = (props) => {
 
     // pin: show the host(s) at that location
     map.on("click", "markers", (e) => {
-      const ips = e.features.map((f) => f.properties.id);
-      onPopup({
-        lngLat: e.features[0].geometry.coordinates,
-        hosts: hostsByIps(ips),
-      });
+      onPopup(hostsByIps(e.features.map((f) => f.properties.id)));
     });
 
     // cluster: show all its hosts
     map.on("click", "clusters", (e) => {
       const feature = e.features[0];
-      const center = feature.geometry.coordinates;
 
       map
         .getSource("hosts")
@@ -315,12 +344,7 @@ const WorldMap = (props) => {
           0,
           (err, leaves) => {
             if (!err) {
-              const ips = leaves.map((f) => f.properties.id);
-              onPopup({
-                lngLat: center,
-                hosts: hostsByIps(ips),
-                isCluster: true,
-              });
+              onPopup(hostsByIps(leaves.map((f) => f.properties.id)));
             }
           },
         );
@@ -339,6 +363,7 @@ const WorldMap = (props) => {
     resizeObserver.observe(containerRef.current);
 
     return () => {
+      isUnmounting.current = true; // keep the open hosts when leaving the map view
       resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
@@ -392,7 +417,11 @@ const WorldMap = (props) => {
     if (!popupRef.current) {
       popupRef.current = new mapboxgl.Popup({ maxWidth: "none" })
         .setDOMContent(popupNode)
-        .on("close", () => onPopup(null));
+        .on("close", () => {
+          if (!isUnmounting.current) {
+            onPopup([]);
+          }
+        });
     }
 
     popupRef.current.setLngLat(props.popup.lngLat);
@@ -400,6 +429,11 @@ const WorldMap = (props) => {
     // addTo() on an open popup closes it first, which would reset the selection
     if (!popupRef.current.isOpen()) {
       popupRef.current.addTo(map);
+    }
+
+    // e.g. opened from a link
+    if (!map.getBounds()?.contains(props.popup.lngLat)) {
+      map.easeTo({ center: props.popup.lngLat });
     }
   }, [mapRef, onPopup, popupNode, props.popup]);
 

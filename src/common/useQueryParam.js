@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const STORAGE_PREFIX = "servers.";
 
@@ -63,10 +63,14 @@ export const useQueryParam = (name, defaultValue, allowedValues) => {
     window.history.replaceState(null, "", url);
   }, [name, value, defaultValue]);
 
-  const setQueryParam = (newValue) => {
-    writeStorage(name, serialize(newValue));
-    setValue(newValue);
-  };
+  // stable, so it can be used in effect dependencies
+  const setQueryParam = useCallback(
+    (newValue) => {
+      writeStorage(name, serialize(newValue));
+      setValue(newValue);
+    },
+    [name],
+  );
 
   return [value, setQueryParam];
 };
