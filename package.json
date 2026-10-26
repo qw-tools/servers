@@ -1,44 +1,36 @@
 {
-  "name": "qw-server-overview",
+  "name": "servers",
   "version": "0.1.0",
-  "description": "QuakeWorld servers overview",
+  "description": "QuakeWorld servers: table, world map and hosts",
   "author": "Viktor Persson",
   "license": "MIT",
-  "repository": "vikpe/qw-server-overview",
+  "repository": "qw-tools/servers",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=https://tools.quake.world/servers/",
+    "build": "vite build --base=/servers/",
     "preview": "vite preview",
-    "format": "yarn prettier --write src"
+    "format": "biome format --write",
+    "lint": "biome lint",
+    "check": "biome check"
   },
+  "packageManager": "pnpm@12.15.0",
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.19",
-    "prettier": "^3.2.5",
-    "tailwindcss": "^3.4.3"
+    "@biomejs/biome": "2.6.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "daisyui": "^5.7.50",
+    "tailwindcss": "^4.3.3"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.15.18",
-    "@mui/material": "^5.15.18",
-    "@vitejs/plugin-react": "^4.3.0",
-    "ag-grid-community": "^31.3.2",
-    "ag-grid-react": "^31.3.2",
-    "classnames": "^2.5.1",
-    "copy-text-to-clipboard": "^3.2.0",
-    "leaflet": "^1.9.4",
-    "lodash.debounce": "^4.0.8",
-    "lodash.pick": "^4.4.0",
-    "lodash.sortby": "^4.7.0",
-    "postcss": "^8.4.38",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-leaflet": "^4.2.1",
-    "sass": "^1.77.2",
-    "timeago.js": "^4.0.2",
-    "vite": "^5.2.12"
+    "@vitejs/plugin-react": "^6.1.2",
+    "ag-grid-community": "^36.2.0",
+    "ag-grid-react": "^36.2.0",
+    "fuse.js": "^7.5.0",
+    "mapbox-gl": "^3.33.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "vite": "^8.3.5"
   }
 }

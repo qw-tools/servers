@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+@theme {
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --color-gray-150: color-mix(
+    in oklab,
+    var(--color-gray-100),
+    var(--color-gray-200)
+  );
+}
+
+/* Tailwind v3 default border color (v4 defaults to currentColor) */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/* map (prefixed to override mapbox-gl.css, which loads later) */
+.mapboxgl-map .mapboxgl-popup-content {
+  width: 460px;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 0;
+  background-color: var(--color-gray-150);
+}
+
+/* popup arrow in the same color as the popup */
+.mapboxgl-map .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.mapboxgl-map .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.mapboxgl-map .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+  border-bottom-color: var(--color-gray-150);
+}
+
+.mapboxgl-map .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.mapboxgl-map .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.mapboxgl-map .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-top-color: var(--color-gray-150);
+}
+
+.mapboxgl-map .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--color-gray-150);
+}
+
+.mapboxgl-map .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--color-gray-150);
+}

@@ -5,33 +5,48 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
-    timeout-minutes: 2
+    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
 
-      - name: Install dependencies
-        run: yarn install --immutable
+      - name: Setup pnpm, Node.js and install dependencies
+        uses: pnpm/setup@v3
+        with:
+          runtime: node@lts
+          cache: true
+          require-lockfile: true
+
+      - name: Lint and check formatting
+        run: pnpm check
 
       - name: Build site
-        run: yarn build
+        run: |
+          if [ -z "$VITE_MAPBOX_ACCESS_TOKEN" ]; then
+            echo "::warning::secret VITE_MAPBOX_ACCESS_TOKEN is not set, the world map will not work"
+          fi
+          pnpm build
+        env:
+          VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: 'dist'
 
   deploy:
     needs: build
-    timeout-minutes: 2
+    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     permissions:
@@ -45,4 +60,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
